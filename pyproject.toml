@@ -7,7 +7,14 @@ authors = [
     { name = "Oleksii_Leshchenko", email = "leshchenko.o91@gmail.com" }
 ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "anthropic>=1.4.0",
+    "google-genai>=2.22.0",
+    "httpx>=0.28.1",
+    "pdfplumber>=0.11.10",
+    "pydantic>=2.13.5",
+    "python-dotenv>=1.2.3",
+]
 
 [project.scripts]
 fia-doc-explainer = "fia_doc_explainer.cli:main"
@@ -15,3 +22,9 @@ fia-doc-explainer = "fia_doc_explainer.cli:main"
 [build-system]
 requires = ["uv_build>=0.10.9,<0.11.0"]
 build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-mock>=3.15.1",
+]
