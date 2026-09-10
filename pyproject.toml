@@ -1,0 +1,17 @@
+[project]
+name = "fia-doc-explainer"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Oleksii_Leshchenko", email = "leshchenko.o91@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = []
+
+[project.scripts]
+fia-doc-explainer = "fia_doc_explainer.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.10.9,<0.11.0"]
+build-backend = "uv_build"
