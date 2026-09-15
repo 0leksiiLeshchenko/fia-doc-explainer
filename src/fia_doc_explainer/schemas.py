@@ -13,8 +13,8 @@ class FlagLowConfidence(BaseModel):
 
 
 class LLMResponse(BaseModel):
-    summary: ProvideSummary | None
-    low_confidence_flag: FlagLowConfidence | None
+    summary: ProvideSummary | None = None
+    low_confidence_flag: FlagLowConfidence | None = None
 
     @model_validator(mode="after")
     def one_of_two(self):

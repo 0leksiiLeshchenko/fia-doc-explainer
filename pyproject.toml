@@ -1,7 +1,7 @@
 [project]
 name = "fia-doc-explainer"
 version = "0.1.0"
-description = "Add your description here"
+description = "Official FIA doc in - clear and simple expanation out"
 readme = "README.md"
 authors = [
     { name = "Oleksii_Leshchenko", email = "leshchenko.o91@gmail.com" }
@@ -25,6 +25,13 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "mypy>=2.3.1",
+    "pre-commit>=4.6.2",
     "pytest>=9.1.1",
     "pytest-mock>=3.15.1",
+    "ruff>=0.16.7",
 ]
+
+[tool.mypy]
+mypy_path = "src"
+explicit_package_bases = true
