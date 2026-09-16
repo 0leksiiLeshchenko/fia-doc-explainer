@@ -15,3 +15,4 @@ repos:
         additional_dependencies:
           - pydantic
           - anthropic
+          - httpx
