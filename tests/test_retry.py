@@ -2,7 +2,7 @@ from collections.abc import Callable
 
 import pytest
 
-from src.fia_doc_explainer.retry import retry
+from fia_doc_explainer.retry import retry
 
 
 def make_flaky_function(
