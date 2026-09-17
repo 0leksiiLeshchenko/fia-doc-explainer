@@ -16,3 +16,4 @@ repos:
           - pydantic
           - anthropic
           - httpx
+          - pdfplumber
