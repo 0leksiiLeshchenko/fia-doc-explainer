@@ -44,7 +44,6 @@ def process_document(
 
     llm_response: LLMResponse | None = None
     escalation_needed: bool = False
-    confidence_flagged: bool = False
     confidence_reason: str | None = None
     heuristic_reason: str | None = None
 
@@ -69,7 +68,6 @@ def process_document(
 
     if llm_response and llm_response.low_confidence_flag:
         escalation_needed = True
-        confidence_flagged = True
         confidence_reason = llm_response.low_confidence_flag.reason
 
     if escalation_needed:
@@ -93,7 +91,6 @@ def process_document(
             ) from exc
 
         if llm_response and llm_response.low_confidence_flag:
-            confidence_flagged = True
             confidence_reason = llm_response.low_confidence_flag.reason
 
     if llm_response and llm_response.low_confidence_flag:
@@ -107,7 +104,6 @@ def process_document(
         key_facts=llm_response.summary.key_facts,
         plain_explanation=llm_response.summary.plain_explanation,
         model_used=llm_response.model,
-        low_confidence=confidence_flagged or heuristic_reason is not None,
         low_confidence_reason=confidence_reason,
         heuristic_reason=heuristic_reason,
     )
