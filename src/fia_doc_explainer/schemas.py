@@ -1,4 +1,4 @@
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, computed_field, model_validator
 
 
 class ProvideSummary(BaseModel):
@@ -34,6 +34,12 @@ class DocumentSummary(BaseModel):
     key_facts: list[str]
     plain_explanation: str
     model_used: str
-    low_confidence: bool
     low_confidence_reason: str | None
     heuristic_reason: str | None
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def low_confidence(self) -> bool:
+        return (
+            self.low_confidence_reason is not None or self.heuristic_reason is not None
+        )
