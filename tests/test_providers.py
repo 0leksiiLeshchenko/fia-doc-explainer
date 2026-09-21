@@ -1,9 +1,17 @@
 from types import SimpleNamespace
 
+import anthropic
+import httpx2
 import pytest
 from anthropic.types import ToolUseBlock
 
 from fia_doc_explainer.providers.anthropic_provider import AnthropicProvider
+from fia_doc_explainer.providers.errors import (
+    ProviderPermanentError,
+    ProviderQuotaError,
+    ProviderResponseError,
+    ProviderTransientError,
+)
 from fia_doc_explainer.schemas import FlagLowConfidence, LLMResponse, ProvideSummary
 
 
@@ -115,7 +123,7 @@ def test_summarize_returns_unexpected_tool_name(provider) -> None:
     response = SimpleNamespace(content=[tool_block])
     mock_client.messages.create.return_value = response
 
-    with pytest.raises(ValueError) as err:
+    with pytest.raises(ProviderResponseError) as err:
         provider_instance.summarize("FIA doc text version")
     assert err.value.args[0] == "Unexpected tool called: 'doc_summary'"
 
@@ -125,6 +133,57 @@ def test_summarize_returns_no_tool_use_block(provider) -> None:
     response = SimpleNamespace(content=[])
     mock_client.messages.create.return_value = response
 
-    with pytest.raises(ValueError) as err:
+    with pytest.raises(ProviderResponseError) as err:
         provider_instance.summarize("FIA doc text version")
     assert err.value.args[0] == "No tool_use block in response: []"
+
+
+def _api_status_error(
+    cls: type[anthropic.APIStatusError], status_code: int, message: str
+) -> anthropic.APIStatusError:
+    request = httpx2.Request("POST", "https://api.anthropic.com/v1/messages")
+    response = httpx2.Response(status_code, request=request)
+    body = {"error": {"type": "error", "message": message}}
+    return cls(message, response=response, body=body)
+
+
+def test_summarize_translates_quota_error(provider, mocker) -> None:
+    provider_instance, _ = provider
+    original = _api_status_error(
+        anthropic.BadRequestError, 400, "Your credit balance is too low"
+    )
+    mocker.patch.object(provider_instance, "_create_message", side_effect=original)
+
+    with pytest.raises(ProviderQuotaError) as err:
+        provider_instance.summarize("FIA doc text version")
+    assert err.value.model == "claude-haiku-4-5"
+    assert "credit balance is too low" in err.value.message
+    assert err.value.__cause__ is original
+
+
+def test_summarize_translates_bad_request_to_permanent_error(provider, mocker) -> None:
+    provider_instance, _ = provider
+    original = _api_status_error(
+        anthropic.BadRequestError, 400, "max_tokens must be positive"
+    )
+    mocker.patch.object(provider_instance, "_create_message", side_effect=original)
+
+    with pytest.raises(ProviderPermanentError) as err:
+        provider_instance.summarize("FIA doc text version")
+    assert err.value.model == "claude-haiku-4-5"
+    assert "max_tokens must be positive" in err.value.message
+    assert err.value.__cause__ is original
+
+
+def test_summarize_translates_retryable_error_to_transient_error(
+    provider, mocker
+) -> None:
+    provider_instance, _ = provider
+    original = _api_status_error(anthropic.RateLimitError, 429, "Rate limited")
+    mocker.patch.object(provider_instance, "_create_message", side_effect=original)
+
+    with pytest.raises(ProviderTransientError) as err:
+        provider_instance.summarize("FIA doc text version")
+    assert err.value.model == "claude-haiku-4-5"
+    assert "Rate limited" in err.value.message
+    assert err.value.__cause__ is original

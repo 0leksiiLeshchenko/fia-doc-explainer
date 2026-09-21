@@ -4,6 +4,12 @@ import anthropic
 from anthropic import Anthropic
 from pydantic import ValidationError
 
+from fia_doc_explainer.providers.errors import (
+    ProviderPermanentError,
+    ProviderQuotaError,
+    ProviderResponseError,
+    ProviderTransientError,
+)
 from fia_doc_explainer.retry import retry
 from fia_doc_explainer.schemas import FlagLowConfidence, LLMResponse, ProvideSummary
 
@@ -31,9 +37,9 @@ class AnthropicProvider:
         self.client = client or Anthropic(max_retries=0)
 
     @retry(exceptions=RETRYABLE_ANTHROPIC_EXCEPTIONS, max_attempts=5, base_delay=1)
-    def summarize(self, text: str) -> LLMResponse:
+    def _create_message(self, text: str) -> anthropic.types.Message:
         try:
-            response = self.client.messages.create(
+            return self.client.messages.create(
                 model=self.model,
                 max_tokens=2048,
                 tools=[
@@ -59,12 +65,31 @@ class AnthropicProvider:
             )
             raise
 
+    def summarize(self, text: str) -> LLMResponse:
+        try:
+            response = self._create_message(text)
+        except anthropic.BadRequestError as err:
+            if is_quota_error(err):
+                raise ProviderQuotaError(
+                    f"Anthropic quota exhausted: {err}", model=self.model
+                ) from err
+            raise ProviderPermanentError(
+                f"Anthropic rejected request: {err}", model=self.model
+            ) from err
+        except RETRYABLE_ANTHROPIC_EXCEPTIONS as err:
+            raise ProviderTransientError(
+                f"Anthropic transient failure: {err}", model=self.model
+            ) from err
+
         tool_block = next(
             (block for block in response.content if block.type == "tool_use"),
             None,
         )
         if tool_block is None:
-            raise ValueError(f"No tool_use block in response: {response.content!r}")
+            raise ProviderResponseError(
+                f"No tool_use block in response: {response.content!r}",
+                model=self.model,
+            )
 
         tool_name = tool_block.name
         try:
@@ -81,4 +106,6 @@ class AnthropicProvider:
             return LLMResponse(
                 low_confidence_flag=FlagLowConfidence(reason=reason), model=self.model
             )
-        raise ValueError(f"Unexpected tool called: {tool_name!r}")
+        raise ProviderResponseError(
+            f"Unexpected tool called: {tool_name!r}", model=self.model
+        )
