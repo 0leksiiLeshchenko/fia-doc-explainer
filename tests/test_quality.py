@@ -9,19 +9,19 @@ from fia_doc_explainer.quality import (
 BASE_LENGTH = 100
 
 
-def test_empty_text_is_flagged():
+def test_empty_text_is_flagged() -> None:
     reason = check_text_quality("")
 
     assert reason == "Extracted text is empty"
 
 
-def test_clean_text_passes():
+def test_clean_text_passes() -> None:
     text = "FIA Formula One World Championship\n\tDecision of the Stewards\n" * 5
 
     assert check_text_quality(text) is None
 
 
-def test_replacement_ratio_above_threshold_is_flagged():
+def test_replacement_ratio_above_threshold_is_flagged() -> None:
     bad = int(REPLACEMENT_CHAR_THRESHOLD * BASE_LENGTH) + 1
     text = REPLACEMENT_CHAR * bad + "a" * (BASE_LENGTH - bad)
 
@@ -31,7 +31,7 @@ def test_replacement_ratio_above_threshold_is_flagged():
     assert "replacement characters" in reason
 
 
-def test_non_printable_ratio_above_threshold_is_flagged():
+def test_non_printable_ratio_above_threshold_is_flagged() -> None:
     bad = int(NON_PRINTABLE_THRESHOLD * BASE_LENGTH) + 1
     text = "\x00" * bad + "a" * (BASE_LENGTH - bad)
 
@@ -41,7 +41,7 @@ def test_non_printable_ratio_above_threshold_is_flagged():
     assert "non-printable characters" in reason
 
 
-def test_replacement_ratio_exactly_at_threshold_passes():
+def test_replacement_ratio_exactly_at_threshold_passes() -> None:
     # Comparison must be strict (>), so a ratio equal to the threshold is fine.
     bad = int(REPLACEMENT_CHAR_THRESHOLD * BASE_LENGTH)
     text = REPLACEMENT_CHAR * bad + "a" * (BASE_LENGTH - bad)
@@ -50,7 +50,7 @@ def test_replacement_ratio_exactly_at_threshold_passes():
     assert check_text_quality(text) is None
 
 
-def test_non_printable_ratio_exactly_at_threshold_passes():
+def test_non_printable_ratio_exactly_at_threshold_passes() -> None:
     # Comparison must be strict (>), so a ratio equal to the threshold is fine.
     bad = int(NON_PRINTABLE_THRESHOLD * BASE_LENGTH)
     text = "\x00" * bad + "a" * (BASE_LENGTH - bad)
