@@ -62,11 +62,15 @@ class AnthropicProvider:
         try:
             if tool_name == "provide_summary":
                 summary = ProvideSummary.model_validate(tool_block.input)
-                return LLMResponse(summary=summary)
+                return LLMResponse(summary=summary, model=self.model)
             elif tool_name == "flag_low_confidence":
                 low_confident_flag = FlagLowConfidence.model_validate(tool_block.input)
-                return LLMResponse(low_confidence_flag=low_confident_flag)
+                return LLMResponse(
+                    low_confidence_flag=low_confident_flag, model=self.model
+                )
         except ValidationError as e:
             reason = f"Schema validation failed for tool '{tool_name}': {e}"
-            return LLMResponse(low_confidence_flag=FlagLowConfidence(reason=reason))
+            return LLMResponse(
+                low_confidence_flag=FlagLowConfidence(reason=reason), model=self.model
+            )
         raise ValueError(f"Unexpected tool called: {tool_name!r}")

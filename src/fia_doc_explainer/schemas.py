@@ -3,7 +3,7 @@ from pydantic import BaseModel, model_validator
 
 class ProvideSummary(BaseModel):
     doc_type: str
-    source_url: str
+    source_url: str | None
     key_facts: list[str]
     plain_explanation: str
 
@@ -15,6 +15,7 @@ class FlagLowConfidence(BaseModel):
 class LLMResponse(BaseModel):
     summary: ProvideSummary | None = None
     low_confidence_flag: FlagLowConfidence | None = None
+    model: str
 
     @model_validator(mode="after")
     def one_of_two(self):
@@ -29,9 +30,10 @@ class LLMResponse(BaseModel):
 
 class DocumentSummary(BaseModel):
     doc_type: str
-    source_url: str
+    source_url: str | None
     key_facts: list[str]
     plain_explanation: str
     model_used: str
     low_confidence: bool
     low_confidence_reason: str | None
+    heuristic_reason: str | None
