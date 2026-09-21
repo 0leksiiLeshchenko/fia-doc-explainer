@@ -4,6 +4,7 @@ import anthropic
 from anthropic import Anthropic
 from pydantic import ValidationError
 
+from fia_doc_explainer.retry import retry
 from fia_doc_explainer.schemas import FlagLowConfidence, LLMResponse, ProvideSummary
 
 logger = logging.getLogger(__name__)
@@ -21,6 +22,7 @@ class AnthropicProvider:
         self.model = model
         self.client = client or Anthropic(max_retries=0)
 
+    @retry(exceptions=RETRYABLE_ANTHROPIC_EXCEPTIONS, max_attempts=5, base_delay=1)
     def summarize(self, text: str) -> LLMResponse:
         try:
             response = self.client.messages.create(
