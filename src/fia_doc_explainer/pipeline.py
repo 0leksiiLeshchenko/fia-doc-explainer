@@ -1,11 +1,13 @@
-import anthropic
-
 from fia_doc_explainer.extract import NoTextLayerError, PdfminerException, extract_text
-from fia_doc_explainer.providers.anthropic_provider import (
-    RETRYABLE_ANTHROPIC_EXCEPTIONS,
-    is_quota_error,
-)
+from fia_doc_explainer.providers.base import LLMProvider
 from fia_doc_explainer.providers.chain import ProviderChain
+from fia_doc_explainer.providers.errors import (
+    ProviderError,
+    ProviderPermanentError,
+    ProviderQuotaError,
+    ProviderResponseError,
+    ProviderTransientError,
+)
 from fia_doc_explainer.quality import check_text_quality
 from fia_doc_explainer.schemas import DocumentSummary, LLMResponse
 
@@ -30,6 +32,22 @@ class LLMError(DocumentProcessingError):
         self.message = message
 
 
+def _summarize_with_quota_fallback(
+    provider: LLMProvider,
+    quota_fallback: LLMProvider,
+    text: str,
+) -> LLMResponse:
+    try:
+        return provider.summarize(text)
+    except ProviderQuotaError:
+        try:
+            return quota_fallback.summarize(text)
+        except ProviderError as exc:
+            raise LLMError(
+                message="No provider can generate proper doc summary"
+            ) from exc
+
+
 def process_document(
     pdf_bytes: bytes,
     providers: ProviderChain,
@@ -42,7 +60,6 @@ def process_document(
             message=f"Error occurred extracting text from the doc: {str(exc)!r}"
         ) from exc
 
-    llm_response: LLMResponse | None = None
     escalation_needed: bool = False
     confidence_reason: str | None = None
     heuristic_reason: str | None = None
@@ -52,52 +69,40 @@ def process_document(
         heuristic_reason = reason
 
     try:
-        llm_response = providers.primary.summarize(text)
-    except anthropic.BadRequestError as err:
-        if is_quota_error(err):
-            try:
-                llm_response = providers.quota_fallback.summarize(text)
-            except Exception as exc:
-                raise LLMError(
-                    message="No provider can generate proper doc summary"
-                ) from exc
-        else:
-            raise LLMError(message=f"Primary provider failed: {err.body}") from err
-    except RETRYABLE_ANTHROPIC_EXCEPTIONS:
+        llm_response = _summarize_with_quota_fallback(
+            providers.primary, providers.quota_fallback, text
+        )
+    except (ProviderTransientError, ProviderResponseError):
         escalation_needed = True
-
-    if llm_response and llm_response.low_confidence_flag:
-        escalation_needed = True
-        confidence_reason = llm_response.low_confidence_flag.reason
+    except ProviderPermanentError as exc:
+        raise LLMError(message=f"Primary provider failed: {exc.message}") from exc
+    else:
+        if llm_response.low_confidence_flag:
+            escalation_needed = True
+            confidence_reason = llm_response.low_confidence_flag.reason
 
     if escalation_needed:
         try:
-            llm_response = providers.escalation.summarize(text)
-        except anthropic.BadRequestError as err:
-            if is_quota_error(err):
-                try:
-                    llm_response = providers.quota_fallback.summarize(text)
-                except Exception as exc:
-                    raise LLMError(
-                        message="No provider can generate proper doc summary"
-                    ) from exc
-            else:
-                raise LLMError(
-                    message=f"Escalation provider failed: {err.body}"
-                ) from err
-        except RETRYABLE_ANTHROPIC_EXCEPTIONS as exc:
+            llm_response = _summarize_with_quota_fallback(
+                providers.escalation, providers.quota_fallback, text
+            )
+        except (
+            ProviderTransientError,
+            ProviderResponseError,
+            ProviderPermanentError,
+        ) as exc:
             raise LLMError(
-                f"Error occurred processing the document: {str(exc)!r}"
+                message=f"Escalation provider failed: {exc.message}"
             ) from exc
 
-        if llm_response and llm_response.low_confidence_flag:
+        if llm_response.low_confidence_flag:
             confidence_reason = llm_response.low_confidence_flag.reason
 
-    if llm_response and llm_response.low_confidence_flag:
+    if llm_response.low_confidence_flag:
         raise LLMError(
             message=f"No provider can generate proper doc summary: {llm_response.low_confidence_flag.reason!r}"
         )
-    assert llm_response is not None and llm_response.summary is not None
+    assert llm_response.summary is not None
     return DocumentSummary(
         doc_type=llm_response.summary.doc_type,
         source_url=source_url,
