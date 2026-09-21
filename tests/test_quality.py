@@ -57,3 +57,16 @@ def test_non_printable_ratio_exactly_at_threshold_passes():
     assert bad / len(text) == NON_PRINTABLE_THRESHOLD
 
     assert check_text_quality(text) is None
+
+
+# extract_text joins pages with "\n\n", so real documents always carry plenty of
+# newlines and tabs. Both are non-printable per str.isprintable() and are kept
+# off the non-printable count only by _ALLOWED_WHITESPACE.
+def test_allowed_whitespace_is_not_counted_as_non_printable() -> None:
+    page = "Decision\tDocument 42\nCar 16\tPenalty: 5 seconds"
+    text = "\n\n".join([page] * 4)
+
+    ws = sum(1 for ch in text if ch in {"\n", "\t"})
+    assert ws / len(text) > NON_PRINTABLE_THRESHOLD
+
+    assert check_text_quality(text) is None
