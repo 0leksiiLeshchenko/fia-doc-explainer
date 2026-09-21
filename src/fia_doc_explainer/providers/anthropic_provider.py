@@ -17,6 +17,14 @@ RETRYABLE_ANTHROPIC_EXCEPTIONS = (
 )
 
 
+def is_quota_error(err: anthropic.BadRequestError) -> bool:
+    body = err.body
+    message = (
+        body.get("error", {}).get("message", "") if isinstance(body, dict) else str(err)
+    )
+    return "credit balance is too low" in message
+
+
 class AnthropicProvider:
     def __init__(self, model: str, client: Anthropic | None = None) -> None:
         self.model = model
