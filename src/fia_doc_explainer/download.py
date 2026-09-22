@@ -2,6 +2,7 @@ from enum import IntEnum
 
 import httpx
 
+from fia_doc_explainer.errors import DownloadError
 from fia_doc_explainer.retry import async_retry
 
 
@@ -41,7 +42,7 @@ RETRYABLE_EXCEPTIONS = (
     max_attempts=5,
     base_delay=1,
 )
-async def download_pdf(url: str) -> bytes:
+async def _fetch_pdf(url: str) -> bytes:
     async with httpx.AsyncClient() as client:
         response = await client.get(url=url)
         if response.status_code in RetryableStatusCode:
@@ -54,3 +55,10 @@ async def download_pdf(url: str) -> bytes:
         response.raise_for_status()
 
         return response.content
+
+
+async def download_pdf(url: str) -> bytes:
+    try:
+        return await _fetch_pdf(url)
+    except (RetryableHTTPError, httpx.HTTPError, httpx.InvalidURL) as exc:
+        raise DownloadError(message=f"Failed to download {url}: {exc}") from exc
