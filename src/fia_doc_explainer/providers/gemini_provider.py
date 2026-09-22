@@ -42,11 +42,15 @@ class GeminiProvider:
                                 types.FunctionDeclaration(
                                     name="provide_summary",
                                     description="Provide summary of the given FIA document if you are confident you understood it",
+                                    # verified against the live API on 2026-09-22: parameters_json_schema=
+                                    # accepts anyOf for source_url: str | None
                                     parameters_json_schema=ProvideSummary.model_json_schema(),
                                 ),
                                 types.FunctionDeclaration(
                                     name="flag_low_confidence",
                                     description="Provide a low confidence reason if you don't clearly understand a given FIA doc and can't explain it's content and meaning",
+                                    # verified against the live API on 2026-09-22: parameters_json_schema=
+                                    # accepts anyOf for source_url: str | None
                                     parameters_json_schema=FlagLowConfidence.model_json_schema(),
                                 ),
                             ]
