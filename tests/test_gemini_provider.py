@@ -3,6 +3,7 @@ from types import SimpleNamespace
 import pytest
 from google.genai import types
 
+from fia_doc_explainer.providers.errors import ProviderResponseError
 from fia_doc_explainer.providers.gemini_provider import GeminiProvider
 from fia_doc_explainer.schemas import FlagLowConfidence, LLMResponse, ProvideSummary
 
@@ -57,3 +58,65 @@ def test_summarize_returns_flag_low_confidence_on_valid_input(provider) -> None:
         result.low_confidence_flag.reason == "Not sure about doc type; too many tables"
     )
     assert result.summary is None
+
+
+def test_summarize_returns_provide_summary_with_incorrect_args(provider) -> None:
+    provider_instance, mock_client = provider
+    call = types.FunctionCall(
+        name="provide_summary",
+        args={
+            "source_url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_final_race_classification.pdf",
+            "key_facts": ["Kimi won", "Lewis - DNF", "Stroll - GOAT"],
+            "plain_explanation": "Race was super boring",
+        },
+    )
+    response = SimpleNamespace(function_calls=[call])
+    mock_client.models.generate_content.return_value = response
+
+    result = provider_instance.summarize("FIA doc text version")
+    assert isinstance(result, LLMResponse)
+    assert isinstance(result.low_confidence_flag, FlagLowConfidence)
+    assert result.low_confidence_flag.reason.startswith(
+        "Schema validation failed for tool 'provide_summary'"
+    )
+    assert result.summary is None
+
+
+def test_summarize_returns_low_confident_flag_with_incorrect_args(provider) -> None:
+    provider_instance, mock_client = provider
+    call = types.FunctionCall(
+        name="flag_low_confidence", args={"error": "low_confidence"}
+    )
+    response = SimpleNamespace(function_calls=[call])
+    mock_client.models.generate_content.return_value = response
+
+    result = provider_instance.summarize("FIA doc text version")
+    assert isinstance(result, LLMResponse)
+    assert isinstance(result.low_confidence_flag, FlagLowConfidence)
+    assert result.low_confidence_flag.reason.startswith(
+        "Schema validation failed for tool 'flag_low_confidence'"
+    )
+    assert result.summary is None
+
+
+def test_summarize_returns_unexpected_tool_name(provider) -> None:
+    provider_instance, mock_client = provider
+    call = types.FunctionCall(
+        name="doc_summary", args={"summary": "Madrid race was great"}
+    )
+    response = SimpleNamespace(function_calls=[call])
+    mock_client.models.generate_content.return_value = response
+
+    with pytest.raises(ProviderResponseError) as err:
+        provider_instance.summarize("FIA doc text version")
+    assert err.value.args[0] == "Unexpected tool called: 'doc_summary'"
+
+
+def test_summarize_returns_no_function_calls(provider) -> None:
+    provider_instance, mock_client = provider
+    response = SimpleNamespace(function_calls=[])
+    mock_client.models.generate_content.return_value = response
+
+    with pytest.raises(ProviderResponseError) as err:
+        provider_instance.summarize("FIA doc text version")
+    assert err.value.args[0] == "No function call in response: []"
