@@ -1,41 +1,8 @@
-import io
-
 import pytest
 from pdfplumber.utils.exceptions import PdfminerException
-from reportlab.pdfgen import canvas
 
 from fia_doc_explainer.extract import NoTextLayerError, extract_text
-
-
-def make_pdf_bytes(pages: list[str | None], is_broken: bool = False) -> bytes:
-    """Build a synthetic in-memory PDF for tests.
-
-    Args:
-        pages: One entry per page. A string draws that text on the page;
-            None produces a page with no text objects at all (simulates
-            a PDF with no extractable text layer, e.g. a scan).
-        is_broken: If True, truncate the finished PDF to half its length,
-            simulating a corrupted/incomplete file (e.g. a truncated
-            download) that pdfplumber cannot parse.
-
-    Returns:
-        Raw PDF bytes, ready to wrap in io.BytesIO for pdfplumber.
-    """
-    buf = io.BytesIO()
-    c = canvas.Canvas(buf, pagesize=(612, 792))
-
-    for page_content in pages:
-        if page_content:
-            c.drawString(50, 600, page_content)
-        c.showPage()
-
-    c.save()
-    pdf_bytes = buf.getvalue()
-
-    if is_broken:
-        pdf_bytes = pdf_bytes[: len(pdf_bytes) // 2]
-
-    return pdf_bytes
+from tests.conftest import make_pdf_bytes
 
 
 def test_extract_text_from_correct_pdf_bytes() -> None:
