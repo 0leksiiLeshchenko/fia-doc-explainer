@@ -1,9 +1,27 @@
+import httpx
 from google import genai
 from google.genai import types
 from pydantic import ValidationError
 
-from fia_doc_explainer.providers.errors import ProviderResponseError
+from fia_doc_explainer.providers.errors import (
+    ProviderPermanentError,
+    ProviderResponseError,
+    ProviderTransientError,
+)
+from fia_doc_explainer.retry import retry
 from fia_doc_explainer.schemas import FlagLowConfidence, LLMResponse, ProvideSummary
+
+
+class _RateLimited(Exception):
+    """Marker for genai.errors.ClientError(code=429): free-tier quota and rate limit are indistinguishable."""
+
+
+RETRYABLE_GEMINI_EXCEPTIONS = (
+    genai.errors.ServerError,
+    _RateLimited,
+    httpx.TimeoutException,
+    httpx.ConnectError,
+)
 
 
 class GeminiProvider:
@@ -11,34 +29,52 @@ class GeminiProvider:
         self.model = model
         self.client = client or genai.Client()
 
-    def summarize(self, text: str) -> LLMResponse:
-        response = self.client.models.generate_content(
-            model=self.model,
-            contents=text,
-            config=types.GenerateContentConfig(
-                tools=[
-                    types.Tool(
-                        function_declarations=[
-                            types.FunctionDeclaration(
-                                name="provide_summary",
-                                description="Provide summary of the given FIA document if you are confident you understood it",
-                                parameters_json_schema=ProvideSummary.model_json_schema(),
-                            ),
-                            types.FunctionDeclaration(
-                                name="flag_low_confidence",
-                                description="Provide a low confidence reason if you don't clearly understand a given FIA doc and can't explain it's content and meaning",
-                                parameters_json_schema=FlagLowConfidence.model_json_schema(),
-                            ),
-                        ]
-                    )
-                ],
-                tool_config=types.ToolConfig(
-                    function_calling_config=types.FunctionCallingConfig(
-                        mode=types.FunctionCallingConfigMode.ANY,
-                    )
+    @retry(exceptions=RETRYABLE_GEMINI_EXCEPTIONS, max_attempts=5, base_delay=1)
+    def _generate_content(self, text: str) -> types.GenerateContentResponse:
+        try:
+            return self.client.models.generate_content(
+                model=self.model,
+                contents=text,
+                config=types.GenerateContentConfig(
+                    tools=[
+                        types.Tool(
+                            function_declarations=[
+                                types.FunctionDeclaration(
+                                    name="provide_summary",
+                                    description="Provide summary of the given FIA document if you are confident you understood it",
+                                    parameters_json_schema=ProvideSummary.model_json_schema(),
+                                ),
+                                types.FunctionDeclaration(
+                                    name="flag_low_confidence",
+                                    description="Provide a low confidence reason if you don't clearly understand a given FIA doc and can't explain it's content and meaning",
+                                    parameters_json_schema=FlagLowConfidence.model_json_schema(),
+                                ),
+                            ]
+                        )
+                    ],
+                    tool_config=types.ToolConfig(
+                        function_calling_config=types.FunctionCallingConfig(
+                            mode=types.FunctionCallingConfigMode.ANY,
+                        )
+                    ),
                 ),
-            ),
-        )
+            )
+        except genai.errors.ClientError as e:
+            if e.code == 429:
+                raise _RateLimited(str(e)) from e
+            raise
+
+    def summarize(self, text: str) -> LLMResponse:
+        try:
+            response = self._generate_content(text)
+        except (_RateLimited, genai.errors.ServerError) as err:
+            raise ProviderTransientError(
+                f"Gemini transient failure: {err}", model=self.model
+            ) from err
+        except genai.errors.ClientError as err:
+            raise ProviderPermanentError(
+                f"Gemini rejected request: {err}", model=self.model
+            ) from err
 
         function_calls = response.function_calls
         if not function_calls:
