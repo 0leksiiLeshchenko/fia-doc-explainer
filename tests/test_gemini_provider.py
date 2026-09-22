@@ -1,9 +1,14 @@
 from types import SimpleNamespace
 
 import pytest
-from google.genai import types
+from google.genai import errors, types
 
-from fia_doc_explainer.providers.errors import ProviderResponseError
+from fia_doc_explainer.providers.errors import (
+    ProviderPermanentError,
+    ProviderQuotaError,
+    ProviderResponseError,
+    ProviderTransientError,
+)
 from fia_doc_explainer.providers.gemini_provider import GeminiProvider
 from fia_doc_explainer.schemas import FlagLowConfidence, LLMResponse, ProvideSummary
 
@@ -120,3 +125,70 @@ def test_summarize_returns_no_function_calls(provider) -> None:
     with pytest.raises(ProviderResponseError) as err:
         provider_instance.summarize("FIA doc text version")
     assert err.value.args[0] == "No function call in response: []"
+
+
+def test_summarize_translates_rate_limit_to_transient_error(provider, mocker) -> None:
+    provider_instance, mock_client = provider
+    mocker.patch("fia_doc_explainer.retry.sleep")
+    original = errors.ClientError(
+        429, {"error": {"status": "RESOURCE_EXHAUSTED", "message": "Quota exceeded"}}
+    )
+    mock_client.models.generate_content.side_effect = original
+
+    with pytest.raises(ProviderTransientError) as err:
+        provider_instance.summarize("FIA doc text version")
+    assert err.value.model == "gemini-3.5-flash-lite"
+    assert "Quota exceeded" in err.value.message
+
+
+def test_summarize_translates_server_error_to_transient_error(provider, mocker) -> None:
+    provider_instance, mock_client = provider
+    mocker.patch("fia_doc_explainer.retry.sleep")
+    original = errors.ServerError(
+        500, {"error": {"status": "INTERNAL", "message": "Internal error"}}
+    )
+    mock_client.models.generate_content.side_effect = original
+
+    with pytest.raises(ProviderTransientError) as err:
+        provider_instance.summarize("FIA doc text version")
+    assert err.value.model == "gemini-3.5-flash-lite"
+    assert "Internal error" in err.value.message
+    assert err.value.__cause__ is original
+
+
+def test_summarize_translates_client_error_to_permanent_error(provider) -> None:
+    provider_instance, mock_client = provider
+    original = errors.ClientError(
+        400, {"error": {"status": "INVALID_ARGUMENT", "message": "Bad request"}}
+    )
+    mock_client.models.generate_content.side_effect = original
+
+    with pytest.raises(ProviderPermanentError) as err:
+        provider_instance.summarize("FIA doc text version")
+    assert err.value.model == "gemini-3.5-flash-lite"
+    assert "Bad request" in err.value.message
+    assert err.value.__cause__ is original
+
+
+def test_summarize_never_raises_quota_error(provider, mocker) -> None:
+    provider_instance, mock_client = provider
+    mocker.patch("fia_doc_explainer.retry.sleep")
+    scenarios = [
+        errors.ClientError(
+            429,
+            {"error": {"status": "RESOURCE_EXHAUSTED", "message": "Quota exceeded"}},
+        ),
+        errors.ServerError(
+            500, {"error": {"status": "INTERNAL", "message": "Internal error"}}
+        ),
+        errors.ClientError(
+            400, {"error": {"status": "INVALID_ARGUMENT", "message": "Bad request"}}
+        ),
+    ]
+
+    for scenario in scenarios:
+        mock_client.models.generate_content.side_effect = scenario
+        with pytest.raises(Exception) as err:
+            provider_instance.summarize("FIA doc text version")
+        assert not isinstance(err.value, ProviderQuotaError)
+        assert isinstance(err.value, (ProviderTransientError, ProviderPermanentError))
