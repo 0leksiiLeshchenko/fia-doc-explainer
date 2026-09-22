@@ -80,8 +80,34 @@ def test_happy_path() -> None:
     assert result.low_confidence is False
     assert result.low_confidence_reason is None
     assert result.heuristic_reason is None
+    assert result.doc_type == "Decision"
+    assert result.key_facts == ["Kimi won", "Lewis - DNF"]
+    assert result.plain_explanation == "Race was super boring"
     assert escalation.calls == []
     assert quota_fallback.calls == []
+
+
+def test_source_url_comes_from_caller_not_from_model() -> None:
+    # the model can hallucinate a url; only the caller-supplied one is trustworthy
+    primary = FakeProvider(
+        model=PRIMARY_MODEL,
+        outcome=summary_response(
+            model=PRIMARY_MODEL,
+            source_url="https://model-made-this-up.example/x.pdf",
+        ),
+    )
+    escalation = _unused_provider(ESCALATION_MODEL)
+    quota_fallback = _unused_provider(QUOTA_FALLBACK_MODEL)
+    providers = ProviderChain(
+        primary=primary, escalation=escalation, quota_fallback=quota_fallback
+    )
+    pdf_bytes = make_pdf_bytes(pages=["Stewards Decision Document 42"])
+
+    result = process_document(
+        pdf_bytes, providers, source_url="https://fia.com/real.pdf"
+    )
+
+    assert result.source_url == "https://fia.com/real.pdf"
 
 
 def test_escalation_on_model_flag() -> None:
