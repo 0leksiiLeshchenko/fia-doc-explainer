@@ -17,3 +17,5 @@ repos:
           - anthropic
           - httpx
           - pdfplumber
+          - google
+          - google.genai
