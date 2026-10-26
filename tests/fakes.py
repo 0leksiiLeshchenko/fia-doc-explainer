@@ -17,13 +17,10 @@ class FakeProvider:
         return self.outcome
 
 
-def summary_response(
-    model: str, doc_type: str = "Decision", source_url: str | None = None
-) -> LLMResponse:
+def summary_response(model: str, doc_type: str = "Decision") -> LLMResponse:
     return LLMResponse(
         summary=ProvideSummary(
             doc_type=doc_type,
-            source_url=source_url,
             key_facts=["Kimi won", "Lewis - DNF"],
             plain_explanation="Race was super boring",
         ),

@@ -31,7 +31,6 @@ def test_summarize_returns_provide_summary_on_valid_input(provider) -> None:
         name="provide_summary",
         args={
             "doc_type": "Classification & Results",
-            "source_url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_final_race_classification.pdf",
             "key_facts": ["Kimi won", "Lewis - DNF", "Stroll - GOAT"],
             "plain_explanation": "Race was super boring",
         },
@@ -70,7 +69,6 @@ def test_summarize_returns_provide_summary_with_incorrect_args(provider) -> None
     call = types.FunctionCall(
         name="provide_summary",
         args={
-            "source_url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_final_race_classification.pdf",
             "key_facts": ["Kimi won", "Lewis - DNF", "Stroll - GOAT"],
             "plain_explanation": "Race was super boring",
         },

@@ -1,9 +1,10 @@
 from pydantic import BaseModel, computed_field, model_validator
 
 
+# No source_url here: the prompt never contains the URL, so the model
+# can't be asked for it. The caller supplies it; see DocumentSummary.
 class ProvideSummary(BaseModel):
     doc_type: str
-    source_url: str | None
     key_facts: list[str]
     plain_explanation: str
 

@@ -32,7 +32,6 @@ def test_summarize_returns_provide_summary_on_valid_input(provider) -> None:
         type="tool_use",
         input={
             "doc_type": "Classification & Results",
-            "source_url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_final_race_classification.pdf",
             "key_facts": ["Kimi won", "Lewis - DNF", "Stroll - GOAT"],
             "plain_explanation": "Race was super boring",
         },
@@ -75,7 +74,6 @@ def test_summarize_returns_provide_summary_with_incorrect_args(provider) -> None
         name="provide_summary",
         type="tool_use",
         input={
-            "source_url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_final_race_classification.pdf",
             "key_facts": ["Kimi won", "Lewis - DNF", "Stroll - GOAT"],
             "plain_explanation": "Race was super boring",
         },
