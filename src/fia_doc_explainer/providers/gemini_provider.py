@@ -3,6 +3,12 @@ from google import genai
 from google.genai import types
 from pydantic import ValidationError
 
+from fia_doc_explainer.prompts import (
+    FLAG_LOW_CONFIDENCE_DESCRIPTION,
+    PROVIDE_SUMMARY_DESCRIPTION,
+    SYSTEM_PROMPT,
+    build_user_message,
+)
 from fia_doc_explainer.providers.errors import (
     ProviderPermanentError,
     ProviderResponseError,
@@ -34,19 +40,20 @@ class GeminiProvider:
         try:
             return self.client.models.generate_content(
                 model=self.model,
-                contents=text,
+                contents=build_user_message(text),
                 config=types.GenerateContentConfig(
+                    system_instruction=SYSTEM_PROMPT,
                     tools=[
                         types.Tool(
                             function_declarations=[
                                 types.FunctionDeclaration(
                                     name="provide_summary",
-                                    description="Provide summary of the given FIA document if you are confident you understood it",
+                                    description=PROVIDE_SUMMARY_DESCRIPTION,
                                     parameters_json_schema=ProvideSummary.model_json_schema(),
                                 ),
                                 types.FunctionDeclaration(
                                     name="flag_low_confidence",
-                                    description="Provide a low confidence reason if you don't clearly understand a given FIA doc and can't explain it's content and meaning",
+                                    description=FLAG_LOW_CONFIDENCE_DESCRIPTION,
                                     parameters_json_schema=FlagLowConfidence.model_json_schema(),
                                 ),
                             ]
