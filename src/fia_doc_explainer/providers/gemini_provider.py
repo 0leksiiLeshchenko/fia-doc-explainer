@@ -102,10 +102,10 @@ class GeminiProvider:
                     low_confidence_flag=low_confident_flag, model=self.model
                 )
         except ValidationError as e:
-            reason = f"Schema validation failed for tool '{tool_name}': {e}"
-            return LLMResponse(
-                low_confidence_flag=FlagLowConfidence(reason=reason), model=self.model
-            )
+            raise ProviderResponseError(
+                f"Schema validation failed for tool '{tool_name}': {e}",
+                model=self.model,
+            ) from e
         raise ProviderResponseError(
             f"Unexpected tool called: {tool_name!r}", model=self.model
         )
