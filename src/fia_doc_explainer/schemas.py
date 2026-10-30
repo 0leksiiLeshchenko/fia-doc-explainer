@@ -11,17 +11,17 @@ class ProvideSummary(BaseModel):
     )
     key_facts: list[str] = Field(
         description="The facts a reader needs in order to know what this document decides: "
-        "who or what it applies to, what was decided, and on what grounds. "
+        "who or what it applies to, which event and session the document concerns, what was decided, and on what grounds. "
         "Three to six items, each a complete sentence. "
         "Leave out procedural boilerplate such as appeal rights or "
         "which evidence was reviewed, unless the decision turns on it."
     )
     plain_explanation: str = Field(
-        description="Plain-language explanation of the document for the reader "
-        "described in the system prompt. If the document is simple — "
-        "an engine changed on a given car, a driver given a grid penalty of "
-        "N places — state its meaning briefly instead of padding it out. "
-        "Add no background the document does not support."
+        description="Plain-language explanation of the document for the reader described in the system prompt. "
+        "It names the event and session the document concerns, where the document states them. "
+        "If the document is simple — an engine changed on a given car, "
+        "a driver given a grid penalty of N places — it states the meaning briefly "
+        "instead of padding it out, and adds no background the document does not support."
     )
 
 
