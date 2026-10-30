@@ -1,0 +1,15 @@
+{
+  "doc_type": "Stewards Decision",
+  "source_url": null,
+  "key_facts": [
+    "Driver Gabriel Bortoleto, car 5, Audi Revolut F1 Team moved under braking into Turn 5 during the race.",
+    "The car made contact with car 43, forcing it to leave the track.",
+    "This breached Article 2 e) of Chapter IV of the FIA International Sporting Code, which prohibits moving under braking in a way that causes dangerous driving or contact.",
+    "The Stewards issued a Warning, which is equivalent to a black/white flag (a warning for unsportsmanlike driving)."
+  ],
+  "plain_explanation": "Gabriel Bortoleto received a Warning for moving his car under braking into Turn 5. His car hit another car (car 43) and forced it off the track. A Warning is the standard penalty for this kind of infringement. A black/white flag is a warning that signals the driver must stop their unsportsmanlike behaviour, or they face a penalty.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}
