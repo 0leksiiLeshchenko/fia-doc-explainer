@@ -3,6 +3,7 @@ import asyncio
 import os
 import pathlib
 import sys
+import textwrap
 from dataclasses import dataclass
 
 from dotenv import load_dotenv
@@ -13,6 +14,7 @@ from fia_doc_explainer.pipeline import process_document
 from fia_doc_explainer.providers.anthropic_provider import AnthropicProvider
 from fia_doc_explainer.providers.chain import ProviderChain
 from fia_doc_explainer.providers.gemini_provider import GeminiProvider
+from fia_doc_explainer.schemas import DocumentSummary
 
 REQUIRED_ENV_VARS = (
     "ANTHROPIC_API_KEY",
@@ -21,6 +23,7 @@ REQUIRED_ENV_VARS = (
     "ANTHROPIC_ESCALATION_MODEL",
     "GEMINI_MODEL",
 )
+WRAP_WIDTH = 88
 
 
 class ConfigError(Exception):
@@ -59,6 +62,52 @@ def _build_arg_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _wrap_paragraphs(text: str) -> str:
+    paragraphs = (part.strip() for part in text.split("\n\n"))
+    return "\n\n".join(textwrap.fill(p, WRAP_WIDTH) for p in paragraphs if p)
+
+
+def _reason_line(label: str, reason: str | None, absent: str) -> str:
+    prefix = f"  {label}: "
+    return textwrap.fill(
+        reason if reason is not None else absent,
+        WRAP_WIDTH,
+        initial_indent=prefix,
+        subsequent_indent=" " * len(prefix),
+    )
+
+
+def format_summary(summary: DocumentSummary) -> str:
+    header = [f"Document type: {summary.doc_type}"]
+    if summary.source_url is not None:
+        header.append(f"Source: {summary.source_url}")
+    header.append(f"Model: {summary.model_used}")
+    sections = ["\n".join(header)]
+
+    if summary.low_confidence:
+        sections.append(
+            "\n".join(
+                [
+                    "LOW CONFIDENCE",
+                    _reason_line(
+                        "Heuristic", summary.heuristic_reason, "not triggered"
+                    ),
+                    _reason_line(
+                        "Model", summary.low_confidence_reason, "did not flag"
+                    ),
+                ]
+            )
+        )
+
+    facts = [
+        textwrap.fill(fact, WRAP_WIDTH, initial_indent="- ", subsequent_indent="  ")
+        for fact in summary.key_facts
+    ]
+    sections.append("\n".join(["Key facts:", *facts]))
+    sections.append("Explanation:\n" + _wrap_paragraphs(summary.plain_explanation))
+    return "\n\n".join(sections)
+
+
 def main(argv: list[str] | None = None) -> int:
     load_dotenv()
 
@@ -91,7 +140,10 @@ def main(argv: list[str] | None = None) -> int:
         print(str(exc), file=sys.stderr)
         return 1
 
-    print(summary.model_dump_json(indent=2))
+    if args.as_json:
+        print(summary.model_dump_json(indent=2))
+    else:
+        print(format_summary(summary))
     return 0
 
 
