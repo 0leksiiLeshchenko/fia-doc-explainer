@@ -155,3 +155,61 @@ field description or require it.
 Not seen, as expected: the V1→V2 changes marked in magenta, and whatever the
 circuit diagrams carry. Clean text, incomplete information, no guard — the same
 family as the table case above.
+
+### v5-*.json — at b0a4610, plain_explanation asks for plain paragraphs
+
+Why: v4-05 came back with bold section headings in plain_explanation. The note
+there called that "convenient for the Telegram stage" — wrong. Telegram's
+MarkdownV2 is its own dialect (single-asterisk bold, mandatory escaping of
+. - ( ) ! and more), so the model's CommonMark would be rejected or shown raw.
+Markup from the model suits neither channel. Decision: the field carries plain
+text, and each renderer adds its own formatting.
+
+The field description now asks for prose in paragraphs separated by a blank
+line, gives multi-topic documents a way to separate topics (each paragraph
+opens with a full sentence introducing it), states why (the program formats),
+and names the forbidden symbols last. A bare "do not use markdown" was
+rejected: a prohibition removes the means but not the need for structure.
+
+#### 05 — 2 runs
+
+Markup in 0 of 2: no **, no #, no list markers, no "Label:" lines. Every topic
+is its own paragraph and opens with a sentence ("There are track limits at
+three locations."). Output 3062 and 3475 bytes against 2647 and 2593 in v4.
+
+#### 01 — 3 runs, against the 5 v4 runs
+
+              chars (mean)   paragraphs
+    v4 (5)    438–537 (498)  1,1,2,1,1
+    v5 (3)    678–806 (734)  3,2,2
+
+The ranges do not overlap, so the growth is the change, not sampling. What
+fills it: the term "moved under braking" glossed in 3 of 3 (absent in v4-run11),
+and the prohibition explained concretely instead of "the rule against
+unsportsmanlike driving". Paragraphs split by meaning: incident, then decision.
+Accepted as it is. The link between "paragraphs" and "fuller glosses" is a
+correlation on three runs, not a finding.
+
+"The Stewards reviewed video evidence" reappeared in 1 of 3. key_facts forbids
+procedural detail, plain_explanation never did. Noise for now.
+
+#### Filled-in facts — a count to keep
+
+Plausible details the document does not state, no flag raised:
+ - v5-05-run2: "may be penalised" — the text says "may be deemed to be going
+   unnecessarily slowly" and "will normally be investigated" (§1);
+ - v5-05-run2: "The Stewards will set a maximum time" — the text says teams
+   "will be informed" after FP2 and names no one; v4-05-run1 made the same
+   attribution;
+ - v5-01-run3: Car 43 left the track "to avoid further damage" — the text says
+   only that it "had to leave the track".
+3 in 7 v5 runs, plus 1 in v4. The first breaks a rule the system prompt states
+almost verbatim ("saying that a penalty followed"). Not attributable to the
+format change. Input for step 8 and §8 of the README.
+
+#### Measurement note
+
+The first markup check ran before the runs existed and printed "clean":
+`grep ... || echo clean` treats grep's exit 2 (error) like exit 1 (no match). A
+check that reports success on a missing file is worse than none. Fixed by
+testing the file first and reading grep's exit code via PIPESTATUS.

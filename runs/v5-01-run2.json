@@ -1,0 +1,15 @@
+{
+  "doc_type": "Stewards Decision",
+  "source_url": null,
+  "key_facts": [
+    "Gabriel Bortoleto, driving car 5 for Audi Revolut F1 Team, was penalized during the Spanish Grand Prix race on 13 September 2026.",
+    "Bortoleto's car moved under braking (changed direction while slowing down) when approaching Turn 5.",
+    "The move caused Bortoleto's car to impact car 43, forcing that car to leave the track.",
+    "The stewards issued a Warning, which is equivalent to a black/white flag (a warning for unsportsmanlike or dangerous driving), as the baseline penalty for this breach of Appendix L, Chapter IV, Article 2 e) of the FIA International Sporting Code."
+  ],
+  "plain_explanation": "Gabriel Bortoleto, driving car 5 for Audi Revolut F1 Team, received a Warning during the Spanish Grand Prix race. The stewards found that his car moved under braking into Turn 5. This means the car changed position side-to-side while slowing down. The move caused contact with car 43, and that car had to leave the track as a result. This breaches a rule in the FIA International Sporting Code that prohibits moving under braking in a way that affects another car.\n\nThe stewards issued a Warning, which is equivalent to a black/white flag. A black/white flag is a warning penalty given when a driver's action is unsportsmanlike or dangerous. The stewards noted that this is the baseline penalty for this type of breach.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}
