@@ -35,7 +35,8 @@ class FlagLowConfidence(BaseModel):
         description="What specifically is wrong with the input, in one or two sentences. "
         "Name the problem, not your impression of it: which part of the text is garbled, "
         "which numbers cannot be attributed to rows or columns, "
-        "or what the text appears to be instead of an FIA document."
+        "or what the text appears to be instead of an FIA document.",
+        min_length=1,
     )
 
 

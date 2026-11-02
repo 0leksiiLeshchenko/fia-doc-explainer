@@ -4,6 +4,7 @@ import anthropic
 import httpx2
 import pytest
 from anthropic.types import ToolUseBlock
+from pydantic import ValidationError
 
 from fia_doc_explainer.providers.anthropic_provider import AnthropicProvider
 from fia_doc_explainer.providers.errors import (
@@ -183,3 +184,8 @@ def test_summarize_translates_retryable_error_to_transient_error(
     assert err.value.model == "claude-haiku-4-5"
     assert "Rate limited" in err.value.message
     assert err.value.__cause__ is original
+
+
+def test_empty_low_confidence_reason_raises_ValidationError() -> None:
+    with pytest.raises(ValidationError):
+        FlagLowConfidence(reason="")
