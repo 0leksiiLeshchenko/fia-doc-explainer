@@ -89,9 +89,14 @@ Predictions were written down before the runs. Scored:
  - would misattribute numbers — correct, but visible only in run 2;
  - would not invent nationality — correct, absent from both.
 
-Run 1: accurate but partial. Five facts covering five of the twelve columns;
-speed, points and the "on lap" column were simply left out. Nothing in the
-output says that seven columns were dropped.
+Run 1: accurate but partial. Of the table's twelve columns the summary drew on
+four — position, driver, laps and gap. Entrant, time, interval and speed were
+never mentioned. The fastest lap time and the lap it was set on do appear, but
+taken from the document's own FASTEST LAP block at the foot of the page rather
+than from the columns, and the DNF list likewise comes from the NOT CLASSIFIED
+block. The model reaches for labelled blocks and prose, and touches the table
+only where word adjacency makes the mapping safe. Nothing in the output says
+anything was left out.
 
 Run 2: wrong. "Max Verstappen finished first with 50 points, Lewis Hamilton
 second with 50 points" — 50 is the ON column, the lap on which each set their
