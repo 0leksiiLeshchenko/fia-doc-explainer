@@ -21,7 +21,12 @@ class ProvideSummary(BaseModel):
         "It names the event and session the document concerns, where the document states them. "
         "If the document is simple — an engine changed on a given car, "
         "a driver given a grid penalty of N places — it states the meaning briefly "
-        "instead of padding it out, and adds no background the document does not support."
+        "instead of padding it out, and adds no background the document does not support. "
+        "It is written as plain prose in paragraphs separated by a blank line. "
+        "When the document covers several topics, each topic gets its own paragraph "
+        "that opens with a full sentence introducing it. "
+        "The program adds all formatting itself, differently for the terminal and for Telegram, "
+        "so the text carries no markup symbols such as asterisks, hash signs or bullet markers."
     )
 
 
