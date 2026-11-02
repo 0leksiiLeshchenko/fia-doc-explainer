@@ -1,0 +1,17 @@
+{
+  "doc_type": "Competition Notes",
+  "source_url": null,
+  "key_facts": [
+    "These notes set out rules for officials, teams and drivers at the 2026 Mexico City Grand Prix on 30 October – 1 November.",
+    "A driver who goes unnecessarily slowly between the two Safety Car lines during qualifying or on reconnaissance laps may be investigated; the maximum allowed time will be told to teams after the second practice session.",
+    "Drivers who are caught by a faster car must allow it past at the first opportunity; the marshalling system will warn them when the faster car is within 1.2 seconds.",
+    "Several changes have been made to the circuit, including a resurfaced section from after Turn 11 to before Turn 1, flattened kerbs at Turn 9, and new or widened blue lines at various points.",
+    "Specific procedures are set out for pit lane entry and exit, parc fermé (the sealed area where cars are held after qualifying and the race), practice starts, and grid procedures.",
+    "The Safety Car will be deployed and withdrawn using messages to all teams rather than waved flags."
+  ],
+  "plain_explanation": "These are the Race Director's Competition Notes for the 2026 Mexico City Grand Prix (30 October – 1 November). They set out detailed instructions for how the event will be run.\n\nKey points for fans:\n\n**Going too slowly:** If a driver goes unnecessarily slowly between two marked lines on the circuit during qualifying or before the race, they can be investigated. The exact time limit will be set after the second practice session.\n\n**Lapping:** When a faster car catches a slower one, the slower driver must let it past. A system will give warnings: first when the faster car is 3 seconds away (so teams can warn their driver), then blue light panels show when it is 1.2 seconds away (and the driver must move over).\n\n**Safety Car:** Instead of waved flags, messages will be sent to all teams saying \"SAFETY CAR DEPLOYED\" or \"SAFETY CAR LIGHTS OFF\", and all trackside light panels will show \"SC\" or clear accordingly.\n\n**Track changes:** The circuit has been resurfaced and modified in several places. Some kerbs have been flattened to make rejoin easier, and new blue lines have been added to mark specific points.\n\n**Procedures:** The notes also cover where team personnel can go in parc fermé, how pit lane entry and exit work, where cars can do practice starts, and how cars will be removed from the grid if needed.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}
