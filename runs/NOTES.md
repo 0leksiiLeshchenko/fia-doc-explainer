@@ -213,3 +213,10 @@ The first markup check ran before the runs existed and printed "clean":
 `grep ... || echo clean` treats grep's exit 2 (error) like exit 1 (no match). A
 check that reports success on a missing file is worse than none. Fixed by
 testing the file first and reading grep's exit code via PIPESTATUS.
+
+### 6446017 — minLength on FlagLowConfidence.reason
+
+An empty reason now fails validation and becomes a malformed response, which
+escalates. Visible to the model as minLength: 1 in the tool schema, so formally
+a prompt change. No run: it affects only the flag path, which the corpus has
+not triggered yet.
