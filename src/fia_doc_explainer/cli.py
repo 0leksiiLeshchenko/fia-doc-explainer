@@ -53,6 +53,14 @@ def load_config() -> Config:
     )
 
 
+def _build_provider_chain(config: Config) -> ProviderChain:
+    return ProviderChain(
+        primary=AnthropicProvider(model=config.anthropic_primary_model),
+        escalation=AnthropicProvider(model=config.anthropic_escalation_model),
+        quota_fallback=GeminiProvider(model=config.gemini_model),
+    )
+
+
 def _build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="fia-doc-explainer")
     source_group = parser.add_mutually_exclusive_group(required=True)
@@ -119,11 +127,7 @@ def main(argv: list[str] | None = None) -> int:
         print(exc.message, file=sys.stderr)
         return 3
 
-    providers = ProviderChain(
-        primary=AnthropicProvider(model=config.anthropic_primary_model),
-        escalation=AnthropicProvider(model=config.anthropic_escalation_model),
-        quota_fallback=GeminiProvider(model=config.gemini_model),
-    )
+    providers = _build_provider_chain(config)
 
     try:
         if args.url is not None:
