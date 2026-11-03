@@ -1,3 +1,4 @@
+from fia_doc_explainer.errors import ExtractionError, LLMError
 from fia_doc_explainer.extract import NoTextLayerError, PdfminerException, extract_text
 from fia_doc_explainer.providers.base import LLMProvider
 from fia_doc_explainer.providers.chain import ProviderChain
@@ -10,26 +11,6 @@ from fia_doc_explainer.providers.errors import (
 )
 from fia_doc_explainer.quality import check_text_quality
 from fia_doc_explainer.schemas import DocumentSummary, LLMResponse
-
-
-class DocumentProcessingError(Exception): ...
-
-
-class DownloadError(DocumentProcessingError): ...
-
-
-class ExtractionError(DocumentProcessingError):
-    def __init__(self, message: str, *args):
-        super().__init__(message, *args)
-
-        self.message = message
-
-
-class LLMError(DocumentProcessingError):
-    def __init__(self, message: str, *args):
-        super().__init__(message, *args)
-
-        self.message = message
 
 
 def _summarize_with_quota_fallback(

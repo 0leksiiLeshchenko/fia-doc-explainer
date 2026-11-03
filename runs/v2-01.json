@@ -1,0 +1,15 @@
+{
+  "doc_type": "Stewards Decision",
+  "source_url": null,
+  "key_facts": [
+    "Driver Gabriel Bortoleto, car 5, driving for Audi Revolut F1 Team, moved the car to the side under braking while approaching Turn 5 in the race.",
+    "Bortoleto's car impacted car 43, forcing the other driver to leave the track.",
+    "This action breached Appendix L, Chapter IV, Article 2 e) of the FIA International Sporting Code, which prohibits moving under braking in a way that forces another car off the track.",
+    "The Stewards issued Bortoleto a Warning, which is equivalent to a black/white flag (a warning for unsportsmanlike or unsafe driving)."
+  ],
+  "plain_explanation": "During the race, Gabriel Bortoleto's car moved sideways under braking at Turn 5, hit another car, and forced it off the track. This action is not allowed because drivers must not move their car to the side while braking in a way that hits or forces other drivers off the circuit. The stewards gave Bortoleto a Warning for this incident, which is the standard penalty for this type of infringement.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}

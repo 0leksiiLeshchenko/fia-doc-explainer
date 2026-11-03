@@ -4,6 +4,12 @@ import anthropic
 from anthropic import Anthropic
 from pydantic import ValidationError
 
+from fia_doc_explainer.prompts import (
+    FLAG_LOW_CONFIDENCE_DESCRIPTION,
+    PROVIDE_SUMMARY_DESCRIPTION,
+    SYSTEM_PROMPT,
+    build_user_message,
+)
 from fia_doc_explainer.providers.errors import (
     ProviderPermanentError,
     ProviderQuotaError,
@@ -42,20 +48,21 @@ class AnthropicProvider:
             return self.client.messages.create(
                 model=self.model,
                 max_tokens=2048,
+                system=SYSTEM_PROMPT,
                 tools=[
                     {
                         "name": "provide_summary",
-                        "description": "Provide summary of the given FIA document if you are confident you understood it",
+                        "description": PROVIDE_SUMMARY_DESCRIPTION,
                         "input_schema": ProvideSummary.model_json_schema(),
                     },
                     {
                         "name": "flag_low_confidence",
-                        "description": "Provide a low confidence reason if you don't clearly understand a given FIA doc and can't explain it's content and meaning",
+                        "description": FLAG_LOW_CONFIDENCE_DESCRIPTION,
                         "input_schema": FlagLowConfidence.model_json_schema(),
                     },
                 ],
                 tool_choice={"type": "any"},
-                messages=[{"role": "user", "content": text}],
+                messages=[{"role": "user", "content": build_user_message(text)}],
             )
         except anthropic.APIStatusError as e:
             logger.error(
@@ -102,10 +109,10 @@ class AnthropicProvider:
                     low_confidence_flag=low_confident_flag, model=self.model
                 )
         except ValidationError as e:
-            reason = f"Schema validation failed for tool '{tool_name}': {e}"
-            return LLMResponse(
-                low_confidence_flag=FlagLowConfidence(reason=reason), model=self.model
-            )
+            raise ProviderResponseError(
+                f"Schema validation failed for tool '{tool_name}': {e}",
+                model=self.model,
+            ) from e
         raise ProviderResponseError(
             f"Unexpected tool called: {tool_name!r}", model=self.model
         )

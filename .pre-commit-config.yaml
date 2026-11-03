@@ -19,3 +19,4 @@ repos:
           - pdfplumber
           - google
           - google.genai
+          - python-dotenv

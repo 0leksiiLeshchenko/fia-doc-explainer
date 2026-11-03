@@ -3,6 +3,12 @@ from google import genai
 from google.genai import types
 from pydantic import ValidationError
 
+from fia_doc_explainer.prompts import (
+    FLAG_LOW_CONFIDENCE_DESCRIPTION,
+    PROVIDE_SUMMARY_DESCRIPTION,
+    SYSTEM_PROMPT,
+    build_user_message,
+)
 from fia_doc_explainer.providers.errors import (
     ProviderPermanentError,
     ProviderResponseError,
@@ -34,23 +40,20 @@ class GeminiProvider:
         try:
             return self.client.models.generate_content(
                 model=self.model,
-                contents=text,
+                contents=build_user_message(text),
                 config=types.GenerateContentConfig(
+                    system_instruction=SYSTEM_PROMPT,
                     tools=[
                         types.Tool(
                             function_declarations=[
                                 types.FunctionDeclaration(
                                     name="provide_summary",
-                                    description="Provide summary of the given FIA document if you are confident you understood it",
-                                    # verified against the live API on 2026-09-22: parameters_json_schema=
-                                    # accepts anyOf for source_url: str | None
+                                    description=PROVIDE_SUMMARY_DESCRIPTION,
                                     parameters_json_schema=ProvideSummary.model_json_schema(),
                                 ),
                                 types.FunctionDeclaration(
                                     name="flag_low_confidence",
-                                    description="Provide a low confidence reason if you don't clearly understand a given FIA doc and can't explain it's content and meaning",
-                                    # verified against the live API on 2026-09-22: parameters_json_schema=
-                                    # accepts anyOf for source_url: str | None
+                                    description=FLAG_LOW_CONFIDENCE_DESCRIPTION,
                                     parameters_json_schema=FlagLowConfidence.model_json_schema(),
                                 ),
                             ]
@@ -99,10 +102,10 @@ class GeminiProvider:
                     low_confidence_flag=low_confident_flag, model=self.model
                 )
         except ValidationError as e:
-            reason = f"Schema validation failed for tool '{tool_name}': {e}"
-            return LLMResponse(
-                low_confidence_flag=FlagLowConfidence(reason=reason), model=self.model
-            )
+            raise ProviderResponseError(
+                f"Schema validation failed for tool '{tool_name}': {e}",
+                model=self.model,
+            ) from e
         raise ProviderResponseError(
             f"Unexpected tool called: {tool_name!r}", model=self.model
         )

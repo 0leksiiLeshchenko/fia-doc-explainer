@@ -1,0 +1,16 @@
+{
+  "doc_type": "Competition Notes",
+  "source_url": null,
+  "key_facts": [
+    "This document applies to all teams and officials at the 2026 Mexico City Grand Prix, held 30 October – 1 November 2026.",
+    "The document sets out instructions for how drivers and teams must conduct themselves during practice sessions, qualifying, and the race, including rules on pit lane procedures, track limits, lapping, and safety car deployment.",
+    "Drivers who exceed a maximum time between safety car lines during qualifying or reconnaissance laps may be deemed to be going unnecessarily slowly and investigated by the Stewards.",
+    "Drivers must allow faster cars to overtake when blue light panels are shown; the marshalling system will warn teams when a faster car is within 3.0 seconds and show lights when it is within 1.2 seconds.",
+    "The document includes specific instructions for pit entry and exit, grid procedures, parc fermé access, practice starts, and track limit violations, with penalties including lap time invalidation for specific offences."
+  ],
+  "plain_explanation": "This is a Competition Notes document for the 2026 Mexico City Grand Prix. It tells teams and drivers the detailed rules for the event.\n\nThe document covers many topics. Here are the main ones:\n\n**Going slowly on track:** If a driver takes too long between two safety car lines during qualifying or the pre-race laps, the Stewards may investigate and decide the driver was going unnecessarily slowly.\n\n**Letting faster cars past:** When a faster car catches a slower one, the slower driver must allow it to overtake at the first opportunity. The marshalling system will send a warning to the team when the faster car is within 3.0 seconds; when it is within 1.2 seconds, blue light panels will be shown to tell the slower driver to let the faster car through.\n\n**Pit lane and track procedures:** The document gives detailed instructions on how drivers must enter and leave the pit lane, where they can do practice starts, how to handle track limit violations at specific corners, and how the safety car will be deployed and withdrawn using light panels and messages to all teams.\n\n**Grid and parc fermé:** There are rules on which gate cars are removed through, where team personnel can enter parc fermé after the race, and how cars must reach the grid under their own power before the race can start.\n\n**Track changes:** The document lists changes made to the circuit, including resurfacing and new line markings.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}

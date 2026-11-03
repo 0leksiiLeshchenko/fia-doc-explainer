@@ -1,0 +1,15 @@
+{
+  "doc_type": "Provisional Race Classification",
+  "source_url": null,
+  "key_facts": [
+    "This document records the provisional results of the 2026 Mexico City Grand Prix on 1 November 2026.",
+    "Max Verstappen finished first with 50 points, Lewis Hamilton second with 50 points, and Kimi Antonelli third with 15 points after all drivers completed 71 laps (305.354 km).",
+    "Five drivers did not finish (DNF): Arvid Lindblad (58 laps), Oliver Bearman (47 laps), Valtteri Bottas (42 laps), Lance Stroll (5 laps), and Fernando Alonso (5 laps).",
+    "Lewis Hamilton set the fastest lap at 1:19.268 on lap 50."
+  ],
+  "plain_explanation": "This is the provisional race classification for the 2026 Mexico City Grand Prix, held on 1 November 2026. The race ran for 71 laps covering 305.354 km. \n\nMax Verstappen won the race, finishing first ahead of Lewis Hamilton in second place. Kimi Antonelli came third. The classification shows the finishing positions of all 17 drivers who completed the full race distance, with their times and points awarded.\n\nFive drivers did not finish the race: Lindblad, Bearman, Bottas, Stroll, and Alonso.\n\nLewis Hamilton also set the fastest lap of the race, with a time of 1:19.268 achieved on lap 50.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}

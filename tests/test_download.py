@@ -3,6 +3,7 @@ import pytest
 import respx
 
 from fia_doc_explainer.download import RetryableHTTPError, download_pdf
+from fia_doc_explainer.errors import DownloadError
 
 TEST_URL = "https://example.com/fia_doc.pdf"
 
@@ -34,8 +35,9 @@ async def test_download_pdf_fails_with_retryable_status_after_exhausting_attempt
     route = respx.get(TEST_URL)
     route.side_effect = [httpx.Response(status_code=500)] * 5
 
-    with pytest.raises(RetryableHTTPError):
+    with pytest.raises(DownloadError) as exc_info:
         await download_pdf(TEST_URL)
+    assert isinstance(exc_info.value.__cause__, RetryableHTTPError)
     assert route.call_count == 5
 
 
@@ -57,8 +59,9 @@ async def test_download_pdf_fails_with_transport_after_exhausting_attempts() -> 
     route = respx.get(TEST_URL)
     route.side_effect = [httpx.ConnectTimeout] * 5
 
-    with pytest.raises(httpx.ConnectTimeout):
+    with pytest.raises(DownloadError) as exc_info:
         await download_pdf(TEST_URL)
+    assert isinstance(exc_info.value.__cause__, httpx.ConnectTimeout)
     assert route.call_count == 5
 
 
@@ -66,7 +69,13 @@ async def test_download_pdf_fails_with_transport_after_exhausting_attempts() -> 
 async def test_download_pdf_fails_after_non_retryable_status_code() -> None:
     route = respx.get(TEST_URL).mock(return_value=httpx.Response(status_code=404))
 
-    with pytest.raises(httpx.HTTPStatusError):
+    with pytest.raises(DownloadError) as exc_info:
         await download_pdf(TEST_URL)
 
+    assert isinstance(exc_info.value.__cause__, httpx.HTTPStatusError)
     assert route.call_count == 1
+
+
+async def test_download_pdf_fails_with_invalid_url() -> None:
+    with pytest.raises(DownloadError):
+        await download_pdf("не-url")

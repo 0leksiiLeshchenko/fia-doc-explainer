@@ -31,7 +31,6 @@ def test_summarize_returns_provide_summary_on_valid_input(provider) -> None:
         name="provide_summary",
         args={
             "doc_type": "Classification & Results",
-            "source_url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_final_race_classification.pdf",
             "key_facts": ["Kimi won", "Lewis - DNF", "Stroll - GOAT"],
             "plain_explanation": "Race was super boring",
         },
@@ -65,12 +64,13 @@ def test_summarize_returns_flag_low_confidence_on_valid_input(provider) -> None:
     assert result.summary is None
 
 
-def test_summarize_returns_provide_summary_with_incorrect_args(provider) -> None:
+def test_summarize_raises_response_error_on_invalid_provide_summary_args(
+    provider,
+) -> None:
     provider_instance, mock_client = provider
     call = types.FunctionCall(
         name="provide_summary",
         args={
-            "source_url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_final_race_classification.pdf",
             "key_facts": ["Kimi won", "Lewis - DNF", "Stroll - GOAT"],
             "plain_explanation": "Race was super boring",
         },
@@ -78,16 +78,14 @@ def test_summarize_returns_provide_summary_with_incorrect_args(provider) -> None
     response = SimpleNamespace(function_calls=[call])
     mock_client.models.generate_content.return_value = response
 
-    result = provider_instance.summarize("FIA doc text version")
-    assert isinstance(result, LLMResponse)
-    assert isinstance(result.low_confidence_flag, FlagLowConfidence)
-    assert result.low_confidence_flag.reason.startswith(
-        "Schema validation failed for tool 'provide_summary'"
-    )
-    assert result.summary is None
+    with pytest.raises(
+        ProviderResponseError,
+        match=r"^Schema validation failed for tool 'provide_summary'",
+    ):
+        provider_instance.summarize("FIA doc text version")
 
 
-def test_summarize_returns_low_confident_flag_with_incorrect_args(provider) -> None:
+def test_summarize_raises_response_error_on_invalid_flag_args(provider) -> None:
     provider_instance, mock_client = provider
     call = types.FunctionCall(
         name="flag_low_confidence", args={"error": "low_confidence"}
@@ -95,13 +93,11 @@ def test_summarize_returns_low_confident_flag_with_incorrect_args(provider) -> N
     response = SimpleNamespace(function_calls=[call])
     mock_client.models.generate_content.return_value = response
 
-    result = provider_instance.summarize("FIA doc text version")
-    assert isinstance(result, LLMResponse)
-    assert isinstance(result.low_confidence_flag, FlagLowConfidence)
-    assert result.low_confidence_flag.reason.startswith(
-        "Schema validation failed for tool 'flag_low_confidence'"
-    )
-    assert result.summary is None
+    with pytest.raises(
+        ProviderResponseError,
+        match=r"^Schema validation failed for tool 'flag_low_confidence'",
+    ):
+        provider_instance.summarize("FIA doc text version")
 
 
 def test_summarize_returns_unexpected_tool_name(provider) -> None:
