@@ -220,3 +220,33 @@ An empty reason now fails validation and becomes a malformed response, which
 escalates. Visible to the model as minLength: 1 in the tool schema, so formally
 a prompt change. No run: it affects only the flag path, which the corpus has
 not triggered yet.
+
+## Step 8 — corpus run, predictions (written before the run)
+
+Eight documents, 3 runs each, 24 calls. Counted per run unless stated.
+A filled-in fact is any detail absent from the document text, world
+knowledge included; checked by hand against the PDF.
+
+Across the corpus: primary answers 24 of 24; heuristic fires 0 of 24;
+model flag 0 of 24 — including both tables, as in v4-04.
+
+- 01 (Warning, moving under braking): no run states a later consequence of
+  the Warning. At least 1 of 3 contains a filled-in fact (v5: 1 of 3).
+- 02 (left track, 5 s): 3 of 3 give 5 s as the penalty imposed; no run
+  presents the 10 s guideline as the decision.
+- 03 (technical, MGU-K): MGU-K glossed in at least 2 of 3. No run places the
+  disqualification in the Race instead of Qualifying.
+- 04 (race classification): at least 1 of 3 attributes a points figure not
+  taken from PTS. No run mentions nationality.
+- 05 (Competition Notes, Mexico): at least 1 of 3 contains a filled-in fact
+  in §1 — a penalty, or the Stewards setting the maximum time. Markup 0 of 3.
+  No run mentions the V1→V2 changes.
+- 06 (qualifying classification): at least 1 of 3 gives Leclerc a Q3 lap
+  time (he set none: DNF). No run names a cause for his DNF (the document gives none) (the
+  document gives none). Pole time correct 3 of 3 — it sits in a labelled
+  block. No run mentions nationality.
+- 07 (track limits, British): 3 of 3 give the 5 s penalty. No run presents
+  the mechanical issue as mitigation. At least 1 of 3 mentions earlier
+  warnings or a black-and-white flag — standard procedure, not in the text.
+- 08 (Competition Notes, Chinese): same §1 wording as 05, so at least 1 of 3
+  contains the same kind of filled-in fact. Markup 0 of 3.
