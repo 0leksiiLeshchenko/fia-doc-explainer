@@ -1,0 +1,16 @@
+{
+  "doc_type": "Stewards Decision",
+  "source_url": null,
+  "key_facts": [
+    "Liam Lawson's car 30 for Visa Cash App Racing Bulls did not comply with Articles C5.12.6 and C5.12.7 of the F1 Regulations during Q2 qualifying at the 2026 Mexico City Grand Prix.",
+    "After the control line at the end of his fastest lap, the driver did not lift off the power immediately, which prevented the car from achieving the required rate of reduction in MGUK deployment (the staged reduction in power from the electrical motor).",
+    "The team argued no performance advantage was gained, but the Stewards ruled that non-compliance with Technical Regulations is not excused by a lack of performance gain.",
+    "Car 30 is disqualified from the Provisional Qualifying Classifications.",
+    "The Stewards noted the team self-disclosed the breach but stated that precedents require disqualification regardless of mitigating circumstances when a car does not comply with Technical Regulations."
+  ],
+  "plain_explanation": "Liam Lawson's car 30 for Visa Cash App Racing Bulls has been disqualified from the results of Q2 qualifying at the 2026 Mexico City Grand Prix.\n\nThe car failed to comply with Articles C5.12.6 and C5.12.7 of the F1 Regulations. After crossing the control line at the end of his fastest lap in Q2, Lawson did not lift off the power immediately. This meant the car could not achieve the regulated \"step down\" — the required rate of reduction in MGUK deployment (the staged reduction in power from the electrical motor).\n\nThe team argued that this breach gave no performance advantage. The Stewards rejected this argument. They said that non-compliance with the Technical Regulations is not excused if no performance advantage is gained. They also noted that the regulations require a car to comply with them at all times during an event.\n\nAlthough the team self-disclosed the breach, the Stewards said there are many precedents that require disqualification when a car does not comply with the Technical Regulations, regardless of other circumstances.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}

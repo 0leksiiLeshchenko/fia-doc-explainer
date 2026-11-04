@@ -1,0 +1,4 @@
+Escalation provider failed: Schema validation failed for tool 'provide_summary': 1 validation error for ProvideSummary
+key_facts
+  Input should be a valid list [type=list_type, input_value='\n<parameter name="key_f...ply across the event."]', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/list_type

@@ -1,0 +1,8 @@
+{
+  "rev": "426637e",
+  "started_at": "2026-11-03T15:57:07Z",
+  "runs_per_document": 3,
+  "ANTHROPIC_PRIMARY_MODEL": "claude-haiku-4-5",
+  "ANTHROPIC_ESCALATION_MODEL": "claude-sonnet-5",
+  "GEMINI_MODEL": "gemini-3.5-flash-lite"
+}

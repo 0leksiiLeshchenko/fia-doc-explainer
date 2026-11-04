@@ -1,0 +1,15 @@
+{
+  "doc_type": "Final Qualifying Classification",
+  "source_url": null,
+  "key_facts": [
+    "This document is the official qualifying grid order for the 2026 Barcelona-Catalunya Grand Prix on 13 June 2026.",
+    "George Russell in the Mercedes-AMG PETRONAS car achieved pole position with a fastest lap time of 1:14.679 in Q3 (the final qualifying session).",
+    "The grid is ranked 1 to 22 based on drivers' fastest qualifying lap times, with Russell first and Fernando Alonso 22nd.",
+    "Charles Leclerc did not complete Q3 (marked DNF, did not finish) and is classified 10th based on his Q2 time."
+  ],
+  "plain_explanation": "This is the final grid order for the 2026 Barcelona-Catalunya Grand Prix qualifying session held on 13 June 2026. It lists all 22 drivers ranked by their best lap time during qualifying.\n\nGeorge Russell in the Mercedes-AMG PETRONAS car achieved pole position, which means he will start the race first. His fastest lap was 1:14.679, set during Q3 (the final part of qualifying). This was the fastest lap of the entire qualifying session.\n\nLewis Hamilton in the Scuderia Ferrari finished second on the grid with a time of 1:14.743, and Kimi Antonelli in the Mercedes-AMG PETRONAS finished third with 1:14.998.\n\nThe grid runs down to 22 drivers. Charles Leclerc, who was running in 10th place, did not complete Q3 (marked as DNF, meaning did not finish). He keeps his 10th grid position based on his best time from Q2, which was 1:15.281.\n\nAll drivers who did not set a time in Q3 are classified based on their fastest laps from Q2 or Q1, whichever was quicker.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}

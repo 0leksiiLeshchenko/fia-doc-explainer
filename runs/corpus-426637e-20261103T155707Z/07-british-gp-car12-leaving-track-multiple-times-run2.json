@@ -1,0 +1,16 @@
+{
+  "doc_type": "Stewards Decision",
+  "source_url": null,
+  "key_facts": [
+    "Driver Kimi Antonelli, car 12, Mercedes-AMG PETRONAS F1 Team, was penalized during the 2026 British Grand Prix race.",
+    "Antonelli left the track at Turn 6 on Lap 44 without a justifiable reason, which breached Article B1.8.6 of the FIA F1 Regulations.",
+    "This was Antonelli's fourth track limits infringement during the race.",
+    "The Stewards imposed a 5 second time penalty, which is the standard penalty for a fourth track limits infringement according to the Penalty Guidelines.",
+    "The Stewards acknowledged that car 12 was experiencing a mechanical issue, but determined this did not amount to a justifiable reason for leaving the track."
+  ],
+  "plain_explanation": "Kimi Antonelli, driving for Mercedes-AMG PETRONAS F1 Team, received a 5 second time penalty during the 2026 British Grand Prix race.\n\nThe penalty was given because car 12 left the track at Turn 6 on Lap 44 without a justifiable reason. This breached Article B1.8.6 of the FIA F1 Regulations, which governs track limits (the requirement to keep the car within the track boundaries).\n\nThis was Antonelli's fourth track limits infringement of the race. Even though the car was experiencing a mechanical issue at the time, the Stewards ruled that this did not provide a justifiable reason for leaving the track.\n\nThe 5 second time penalty is the standard penalty under the Penalty Guidelines for a fourth track limits infringement during a race.</explanation>\n</invoke>",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}

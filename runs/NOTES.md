@@ -250,3 +250,107 @@ model flag 0 of 24 — including both tables, as in v4-04.
   warnings or a black-and-white flag — standard procedure, not in the text.
 - 08 (Competition Notes, Chinese): same §1 wording as 05, so at least 1 of 3
   contains the same kind of filled-in fact. Markup 0 of 3.
+
+## Step 8 — corpus run at 426637e (runs/corpus-426637e-20261103T155707Z)
+
+Eight documents, 3 runs each, 24 calls. Models as in manifest.json: primary
+claude-haiku-4-5, escalation claude-sonnet-5, quota fallback
+gemini-3.5-flash-lite. The predictions above were committed before the run.
+
+### Outcome
+
+21 of 24 calls succeeded, every one answered by the primary model. Escalation
+produced no successful answer. Three calls failed with exit 1: 01 run1,
+01 run3, 08 run2. Heuristic fired 0 of 21, model flag 0 of 21.
+
+### Predictions scored
+
+18 of 23 held. The five misses:
+ - "primary answers 24 of 24" — three calls failed outright;
+ - 04: no run misattributed points; run3 gives 25/18/15, all from PTS;
+ - 06: no run gave Leclerc a Q3 time; run1 states that 1:15.281 is his Q2 time;
+ - 07: no run mentioned earlier warnings or a black-and-white flag;
+ - 08: no filled-in fact in §1 in either successful run.
+
+The pattern in the misses: errors were expected at the obvious traps, the model
+held there and went wrong elsewhere (below). Predicting where a model will fill
+in turned out much harder than predicting that it will.
+
+### Malformed tool calls
+
+All three failures are the same: key_facts arrived as a string, and the string
+contains `<parameter name="key_f...` — the model wrote its own tool-call
+syntax inside a JSON value. The same failure as v3-01-run7.
+
+A fourth case passed validation: 07 run2 ends plain_explanation with
+`</explanation>\n</invoke>`. A string is a valid string, so neither pydantic nor
+the heuristic objects, and the text would have reached the reader. That makes
+4 of 24 calls with a broken tool-call format, one of them silent.
+
+"Escalation provider failed" means the primary failed first and the escalation
+model then failed on the same input in the same way. The failures are
+correlated, while escalation to a model of the same vendor assumes they are
+independent — retrying on a replica that chokes on the same payload. The
+primary's own error is lost: .err keeps only the last error in the chain.
+
+01 now has 3 malformed responses in 14 runs across all versions (v3 one, this
+run two). An observation, not yet a finding.
+
+### Errors in clean text
+
+11 of 21 successful answers contain at least one error, the 07 leak included.
+No guard fired on any of them — the v4-04 conclusion, now on more data: the
+errors live in clean text, the guards watch for broken text.
+
+Filled in from general knowledge — not in the document:
+ - 06, all 3 runs: the qualifying classification presented as the starting
+   grid ("which means he will start the race first", "sets the starting
+   grid"). The FIA publishes the grid as a separate document; penalties can
+   make it differ. Invented qualifying rules on top: run1 "classified based on
+   their fastest laps from Q2 or Q1, whichever was quicker", run2 "In Q1 and
+   Q2, all drivers were on track and set times";
+ - 05 run1: "may be investigated and penalized" — the same addition as
+   v5-05-run2;
+ - 05 run3: "the stewards may investigate them" — the text says "Incidents
+   will normally be investigated" and names no one;
+ - 01 run2: the Warning described as "a penalty for unsportsmanlike or
+   reckless driving".
+
+Misread — the text is there, the meaning is distorted:
+ - 03 run3: disqualified "from the results of Q2 qualifying"; the decision
+   covers the whole Provisional Qualifying Classification;
+ - 04 run2: "Ten drivers were classified ... Four drivers finished the race
+   but were not classified in the points" — 17 are classified, 7 outside the
+   points;
+ - 06 run3: Leclerc "did not earn a grid position in the top ten" — he is 10th;
+ - 08 run3: practice starts — "stay to the left-hand side ... and not cross
+   the white line"; the text forbids crossing the line on the left and puts
+   the queue on the right. TSP 17 "moved 100 metres further back"; the text
+   says "moved to 100m before the turn";
+ - 05 run2: "blue flag signals"; the text says blue light panels.
+
+### Tables
+
+Column confusion by value format: 0 of 6 table runs, including 06, which has
+three groups of same-format columns. On 04 it is now 1 case in 5 runs overall.
+On tables the errors moved to counting rows (04 run2) and to domain rules
+filled in from outside (06). The mechanism is not refuted, but it is rarer than
+v4-04 suggested.
+
+### Definition note
+
+"Filled-in fact" was refined after the run. As written above it includes
+world knowledge, which formally covers term glosses such as "MGU-K, a
+motor-generator unit" — and those are what the prompt asks for. Working
+definition from here on: a claim about the event, the decision or a procedure
+that the text does not support; explaining a term does not count. Recorded
+because the change was made after seeing the results.
+
+### Decision
+
+Next: strict tool use (`strict: true`) on the Anthropic tools, then the same
+corpus again, 3 runs each, for a before/after comparison. Known obstacle:
+strict schemas do not support minLength, and FlagLowConfidence.reason carries
+one since 6446017; deciding what replaces it is part of the change. Open
+question for the rerun: whether strict also stops a leak inside a string
+value, as in 07 run2, or only the structural failures.

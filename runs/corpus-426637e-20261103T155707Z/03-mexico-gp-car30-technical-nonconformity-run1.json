@@ -1,0 +1,16 @@
+{
+  "doc_type": "Stewards Decision",
+  "source_url": null,
+  "key_facts": [
+    "The decision concerns car 30, driven by Liam Lawson of the Visa Cash App Racing Bulls F1 Team, in qualifying at the 2026 Mexico City Grand Prix on 31 October 2026.",
+    "Car 30 breached Articles C5.12.6 and C5.12.7 of the F1 Regulations, which set requirements for how the MGUK (a motor-generator unit for kinetic energy) must be deployed and stepped down after the control line at the end of a qualifying lap.",
+    "After the control line at the end of his fastest lap in Q2, Liam Lawson did not immediately lift off the power, with the result that the car did not achieve the required rate of reduction of MGUK deployment.",
+    "The team argued no performance advantage was gained, but the Stewards noted that non-compliance with the Technical Regulations is not excused by lack of performance advantage, and that cars must comply at all times during an event.",
+    "Car 30 is disqualified from the results of the Provisional Qualifying Classifications."
+  ],
+  "plain_explanation": "Liam Lawson's car failed to comply with the technical regulations during qualifying at the 2026 Mexico City Grand Prix. After crossing the control line at the end of his fastest lap in Q2, Lawson did not immediately lift off the power. This meant the car's MGUK — a motor-generator unit that recovers kinetic energy — was not stepped down (reduced) at the rate the regulations require.\n\nThe Racing Bulls team said this gave them no advantage in performance. But the Stewards explained that the regulations do not allow non-compliance even without a performance gain. Cars must follow the technical regulations at all times during an event. The team did disclose the breach themselves, which the Stewards noted, but the Stewards said there are many previous decisions that require them to disqualify a car for breach of the technical regulations, whatever the circumstances.\n\nAs a result, car 30 is disqualified from the results of qualifying.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}
