@@ -182,7 +182,7 @@ documents with a text layer, so no scan reached the corpus.
 ### Why Haiku by default
 
 Chosen as the cheapest model in the chain by list price. On the corpus,
-after strict tool use, it answered 23 of 24 documents without needing
+after strict tool use, it answered 23 of 24 calls without needing
 escalation. Cost and latency were not measured: token usage is not read
 from the API responses yet, so this section has no numbers to offer on
 either.
@@ -251,45 +251,6 @@ which git does not see.
   is covered by tests with fake providers only.
 - **Cost and latency are not measured** — token usage is not read from the
   API responses yet.
-
-## Running it
-
-Requires Python 3.13 and [uv](https://docs.astral.sh/uv/).
-
-```bash
-uv sync
-cp .env.example .env   # then fill in the two API keys
-```
-
-All five variables in `.env` are required; there are no defaults in code,
-and a missing one stops the CLI before any API call (exit 3).
-
-```bash
-uv run fia-doc-explainer --url https://www.fia.com/.../decision.pdf
-uv run fia-doc-explainer --file path/to/document.pdf
-uv run fia-doc-explainer --file path/to/document.pdf --json
-```
-
-Exit codes: 0 success, 1 the document could not be processed, 2 bad
-arguments, 3 missing configuration.
-
-Tests and checks:
-
-```bash
-uv run pytest
-uv run pre-commit run --all-files
-```
-
-No test calls a real API or the network.
-
-A corpus run (needs `jq`; spends real tokens):
-
-```bash
-scripts/run_corpus.sh 3   # 3 runs per document
-```
-
-It refuses to start if anything outside `runs/` is uncommitted, and writes
-each answer, any errors and a manifest to `runs/corpus-<commit>-<time>/`.
 
 ## Running it
 
