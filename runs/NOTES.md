@@ -220,3 +220,258 @@ An empty reason now fails validation and becomes a malformed response, which
 escalates. Visible to the model as minLength: 1 in the tool schema, so formally
 a prompt change. No run: it affects only the flag path, which the corpus has
 not triggered yet.
+
+## Step 8 — corpus run, predictions (written before the run)
+
+Eight documents, 3 runs each, 24 calls. Counted per run unless stated.
+A filled-in fact is any detail absent from the document text, world
+knowledge included; checked by hand against the PDF.
+
+Across the corpus: primary answers 24 of 24; heuristic fires 0 of 24;
+model flag 0 of 24 — including both tables, as in v4-04.
+
+- 01 (Warning, moving under braking): no run states a later consequence of
+  the Warning. At least 1 of 3 contains a filled-in fact (v5: 1 of 3).
+- 02 (left track, 5 s): 3 of 3 give 5 s as the penalty imposed; no run
+  presents the 10 s guideline as the decision.
+- 03 (technical, MGU-K): MGU-K glossed in at least 2 of 3. No run places the
+  disqualification in the Race instead of Qualifying.
+- 04 (race classification): at least 1 of 3 attributes a points figure not
+  taken from PTS. No run mentions nationality.
+- 05 (Competition Notes, Mexico): at least 1 of 3 contains a filled-in fact
+  in §1 — a penalty, or the Stewards setting the maximum time. Markup 0 of 3.
+  No run mentions the V1→V2 changes.
+- 06 (qualifying classification): at least 1 of 3 gives Leclerc a Q3 lap
+  time (he set none: DNF). No run names a cause for his DNF (the document gives none) (the
+  document gives none). Pole time correct 3 of 3 — it sits in a labelled
+  block. No run mentions nationality.
+- 07 (track limits, British): 3 of 3 give the 5 s penalty. No run presents
+  the mechanical issue as mitigation. At least 1 of 3 mentions earlier
+  warnings or a black-and-white flag — standard procedure, not in the text.
+- 08 (Competition Notes, Chinese): same §1 wording as 05, so at least 1 of 3
+  contains the same kind of filled-in fact. Markup 0 of 3.
+
+## Step 8 — corpus run at 426637e (runs/corpus-426637e-20261103T155707Z)
+
+Eight documents, 3 runs each, 24 calls. Models as in manifest.json: primary
+claude-haiku-4-5, escalation claude-sonnet-5, quota fallback
+gemini-3.5-flash-lite. The predictions above were committed before the run.
+
+### Outcome
+
+21 of 24 calls succeeded, every one answered by the primary model. Escalation
+produced no successful answer. Three calls failed with exit 1: 01 run1,
+01 run3, 08 run2. Heuristic fired 0 of 21, model flag 0 of 21.
+
+### Predictions scored
+
+18 of 23 held. The five misses:
+ - "primary answers 24 of 24" — three calls failed outright;
+ - 04: no run misattributed points; run3 gives 25/18/15, all from PTS;
+ - 06: no run gave Leclerc a Q3 time; run1 states that 1:15.281 is his Q2 time;
+ - 07: no run mentioned earlier warnings or a black-and-white flag;
+ - 08: no filled-in fact in §1 in either successful run.
+
+The pattern in the misses: errors were expected at the obvious traps, the model
+held there and went wrong elsewhere (below). Predicting where a model will fill
+in turned out much harder than predicting that it will.
+
+### Malformed tool calls
+
+All three failures are the same: key_facts arrived as a string, and the string
+contains `<parameter name="key_f...` — the model wrote its own tool-call
+syntax inside a JSON value. The same failure as v3-01-run7.
+
+A fourth case passed validation: 07 run2 ends plain_explanation with
+`</explanation>\n</invoke>`. A string is a valid string, so neither pydantic nor
+the heuristic objects, and the text would have reached the reader. That makes
+4 of 24 calls with a broken tool-call format, one of them silent.
+
+"Escalation provider failed" means the primary failed first and the escalation
+model then failed on the same input in the same way. The failures are
+correlated, while escalation to a model of the same vendor assumes they are
+independent — retrying on a replica that chokes on the same payload. The
+primary's own error is lost: .err keeps only the last error in the chain.
+
+01 now has 3 malformed responses in 14 runs across all versions (v3 one, this
+run two). An observation, not yet a finding.
+
+### Errors in clean text
+
+11 of 21 successful answers contain at least one error, the 07 leak included.
+No guard fired on any of them — the v4-04 conclusion, now on more data: the
+errors live in clean text, the guards watch for broken text.
+
+Filled in from general knowledge — not in the document:
+ - 06, all 3 runs: the qualifying classification presented as the starting
+   grid ("which means he will start the race first", "sets the starting
+   grid"). The FIA publishes the grid as a separate document; penalties can
+   make it differ. Invented qualifying rules on top: run1 "classified based on
+   their fastest laps from Q2 or Q1, whichever was quicker", run2 "In Q1 and
+   Q2, all drivers were on track and set times";
+ - 05 run1: "may be investigated and penalized" — the same addition as
+   v5-05-run2;
+ - 05 run3: "the stewards may investigate them" — the text says "Incidents
+   will normally be investigated" and names no one;
+ - 01 run2: the Warning described as "a penalty for unsportsmanlike or
+   reckless driving".
+
+Misread — the text is there, the meaning is distorted:
+ - 03 run3: disqualified "from the results of Q2 qualifying"; the decision
+   covers the whole Provisional Qualifying Classification;
+ - 04 run2: "Ten drivers were classified ... Four drivers finished the race
+   but were not classified in the points" — 17 are classified, 7 outside the
+   points;
+ - 06 run3: Leclerc "did not earn a grid position in the top ten" — he is 10th;
+ - 08 run3: practice starts — "stay to the left-hand side ... and not cross
+   the white line"; the text forbids crossing the line on the left and puts
+   the queue on the right. TSP 17 "moved 100 metres further back"; the text
+   says "moved to 100m before the turn";
+ - 05 run2: "blue flag signals"; the text says blue light panels.
+
+### Tables
+
+Column confusion by value format: 0 of 6 table runs, including 06, which has
+three groups of same-format columns. On 04 it is now 1 case in 5 runs overall.
+On tables the errors moved to counting rows (04 run2) and to domain rules
+filled in from outside (06). The mechanism is not refuted, but it is rarer than
+v4-04 suggested.
+
+### Definition note
+
+"Filled-in fact" was refined after the run. As written above it includes
+world knowledge, which formally covers term glosses such as "MGU-K, a
+motor-generator unit" — and those are what the prompt asks for. Working
+definition from here on: a claim about the event, the decision or a procedure
+that the text does not support; explaining a term does not count. Recorded
+because the change was made after seeing the results.
+
+### Decision
+
+Next: strict tool use (`strict: true`) on the Anthropic tools, then the same
+corpus again, 3 runs each, for a before/after comparison. Known obstacle:
+strict schemas do not support minLength, and FlagLowConfidence.reason carries
+one since 6446017; deciding what replaces it is part of the change. Open
+question for the rerun: whether strict also stops a leak inside a string
+value, as in 07 run2, or only the structural failures.
+
+## Strict rerun — predictions (written before the run)
+
+Same corpus, same script, 3 runs per document, 24 calls; the only change
+since the step 8 run is strict tool use on both Anthropic tools. Baseline
+is the step 8 run: 3 calls failed on a malformed tool call, 1 more leaked
+`</invoke>` into plain_explanation, 11 of 21 answers had a content error.
+Filled-in facts are counted by the refined definition from step 8.
+
+Format — what strict is meant to fix:
+ - structural failures (key_facts as a string, any "Schema validation
+   failed" in .err): 0 of 24. Constrained decoding makes them impossible,
+   not just rarer; a single one would mean strict is not in effect;
+ - tool-call markup inside a string value (`<parameter`, `</invoke>`,
+   `</explanation>`): this run cannot decide it. Strict constrains the
+   structure, not the characters inside a string, and the baseline had 1 in
+   24 — zero here would be as likely by chance as by the fix. Recorded, not
+   predicted.
+
+Pipeline:
+ - 24 of 24 calls succeed, all answered by the primary model;
+ - heuristic 0 of 24, model flag 0 of 24.
+
+Content — what strict is not meant to touch:
+ - answers with at least one content error: roughly as before, 8 to 15 of
+   24. A drop outside that range would need an explanation, since nothing
+   in the prompt changed;
+ - 06: the qualifying classification presented as the starting grid in at
+   least 2 of 3 — it was 3 of 3, a systematic error, not noise.
+
+## Strict rerun at 1161b61 (runs/corpus-1161b61-20261104T110429Z)
+
+Same corpus, same script, 3 runs per document, 24 calls. The only code change
+since the step 8 run is 47f412f: strict tool use on both Anthropic tools.
+
+### Before and after
+
+                                     step 8 (426637e)   strict (1161b61)
+    successful calls                 21 / 24            24 / 24
+    structural failures              3                  0
+    tool-call markup in a string     1 (07 run2)        0
+    escalations                      3, all failed      1, succeeded
+    model flag                       0                  1
+    heuristic                        0                  0
+    answers with a content error     10 / 21            12 / 24
+
+The step 8 figure is recounted by the refined definition: 01 run2 there
+("a penalty for unsportsmanlike or reckless driving") glosses a term and no
+longer counts, so 11 becomes 10. Both columns now use one definition.
+
+### Predictions scored
+
+4 of 6 checkable predictions held: 0 structural failures, 24 of 24 calls
+succeed, heuristic 0, content errors within 8–15 (12), 06 presented as the
+starting grid in at least 2 of 3 (3 of 3). Missed: "all answered by the
+primary" and "model flag 0" — the same single call, 06 run2, below.
+
+Markup inside a string: 0, as recorded beforehand this run cannot decide it.
+At the old rate of 1 in 24, a run of 24 shows zero about 36% of the time.
+
+### Structural failures: 3 → 0
+
+If strict changed nothing and the rate stayed at 3 in 24, zero in 24 would
+come up about 4% of the time. The stronger argument is the mechanism:
+constrained decoding makes a structural failure impossible by construction,
+so the run confirms that strict is in effect rather than proving it works.
+With no malformed responses left, the escalations caused by them are gone
+too: escalation was spent 3 times on correlated failures, now once, on a flag.
+
+### First model flag on a real document — for the wrong reason
+
+06 run2: the primary called flag_low_confidence with "The document is a
+timing sheet showing final qualifying results, not a stewards decision
+document. It contains classification data and does not decide any penalty,
+appeal, or sporting matter." The escalation model then answered, and the
+flag reason was kept in the output. The first time the flag → escalation →
+summary path ran end to end on a real document.
+
+But the flag exists for unusable input, and the complaint is about genre:
+the document decides nothing. The table failure the flag was expected to
+catch — structure lost on extraction — is not what triggered it. Likely
+cause: the schema is framed around decisions (key_facts: "what this document
+decides"), so a document without one looks foreign. One case in 24, an
+observation. The escalation answer still presents the classification as the
+grid ("giving the full grid order for the race").
+
+### Content errors: systematic and random
+
+Repeated in both runs:
+ - 06: classification presented as the starting grid — 6 of 6 across both;
+ - 05: "may be penalised" for going slowly, or an actor the text does not
+   name — 3 of 3 here (run1 "The Race Director will give teams a maximum
+   time"; runs 2 and 3 "may be penalised"), 2 of 3 in step 8. 08 run3 now
+   shows the same "may be penalised", so the §1 wording pattern holds across
+   the genre after all, not only on 05;
+ - 08 run3: the same two misreads as step 8 run3 — "stay left" for practice
+   starts, and TSP 17 "moved 100 metres further back".
+
+New, single:
+ - 01 run2: the Warning is "a signal that further offences can lead to a
+   penalty" — a consequence the text does not state;
+ - 04 run2: "Seventeen drivers finished the race in the points-scoring
+   positions" — 10 scored, and the next paragraph says so itself;
+ - 06 run2: "only drivers ranked 1st to 10th (Russell down to Leclerc) set
+   times in Q3" — Leclerc set none;
+ - 06 run3: Leclerc "had the third-fastest time in Q2" — 1:15.281 is second,
+   after Russell's 1:15.228;
+ - 07 run3: "Antonelli's team said he was experiencing a mechanical issue" —
+   in the text the Stewards accepted it;
+ - 08 run1: "the fast lane (the lane closest to the pit boxes)" — a wrong
+   gloss, counted as an error of fact;
+ - 08 run2: "maximum speeds on certain laps" — the text sets a maximum time.
+
+A systematic error is a prompt problem and can be addressed there; 06 and
+05 are the first candidates. A random one can only be made rarer.
+
+### Conclusion
+
+Strict fixed what it was meant to fix and left content alone: format
+failures 4 in 24 → 0 in 24, content errors unchanged within noise. The
+remaining risk is entirely in clean text, where no guard looks.

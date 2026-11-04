@@ -1,0 +1,16 @@
+{
+  "doc_type": "Stewards Decision",
+  "source_url": null,
+  "key_facts": [
+    "Liam Lawson, driving car 30 for Visa Cash App Racing Bulls, is disqualified from the Qualifying results of the 2026 Mexico City Grand Prix.",
+    "The car did not comply with Articles C5.12.6 and C5.12.7 of the F1 Regulations, which govern the power step down of the Motor Generator Unit Kinetic (MGUK, an energy recovery system) after the control line.",
+    "After crossing the control line at the end of his fastest lap in Q2, Lawson did not lift off the power immediately, which meant the car did not achieve the required rate of reduction in MGUK deployment.",
+    "The team argued no performance advantage was gained, but the Stewards ruled that non-compliance with the Technical Regulations is a breach regardless of whether performance was gained.",
+    "The team self-disclosed the breach, which the Stewards acknowledged as a mitigating circumstance, but found precedent requires disqualification when a car does not comply with the Technical Regulations."
+  ],
+  "plain_explanation": "This is a Stewards decision about qualifying for the 2026 Mexico City Grand Prix on 31 October 2026.\n\nLiam Lawson's car, number 30, driven for Visa Cash App Racing Bulls, is disqualified from the Qualifying results. This means his qualifying lap times do not count.\n\nThe car breached the Technical Regulations in two articles that control the Motor Generator Unit Kinetic, or MGUK. This is a system that recovers energy and feeds it back into the car. The regulations require that after the control line at the end of a lap, the driver must lift off the power immediately. This triggers a step down, a controlled reduction in MGUK deployment.\n\nOn Lawson's fastest lap in Q2, after he crossed the control line, he did not lift off the power straight away. As a result, the car did not achieve the required rate of reduction in MGUK deployment that the regulations demand.\n\nThe Racing Bulls team argued that this breach did not give the car any performance advantage. However, the Stewards ruled that the Technical Regulations must be followed at all times, and a breach is a breach even if no advantage was gained. The Stewards noted that the team disclosed the problem themselves, which is a point in their favour. But the Stewards found that previous decisions require disqualification when a car does not comply with the Technical Regulations, and so the disqualification is imposed.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}

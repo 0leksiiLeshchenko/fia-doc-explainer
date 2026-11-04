@@ -1,0 +1,17 @@
+{
+  "doc_type": "Provisional Race Classification",
+  "source_url": null,
+  "key_facts": [
+    "This document is the provisional race classification for the 2026 Mexico City Grand Prix, issued on 1 November 2026 after 71 laps.",
+    "Max Verstappen in the Oracle Red Bull Racing car finished first with a time of 2:20:28.772.",
+    "Lewis Hamilton in Scuderia Ferrari finished second, 0.799 seconds behind Verstappen.",
+    "Kimi Antonelli in the Mercedes-AMG PETRONAS F1 Team finished third, 4.006 seconds behind Verstappen.",
+    "Seventeen drivers completed the full 71 laps and are classified; five drivers did not finish the race.",
+    "Lewis Hamilton set the fastest lap at 1:19.268 on lap 50."
+  ],
+  "plain_explanation": "This is the provisional race classification for the 2026 Mexico City Grand Prix, held on 30 October to 1 November. The classification covers the 71-lap race, which was 305.354 km long.\n\nMax Verstappen won the race, driving for Oracle Red Bull Racing. He finished in 2 hours, 20 minutes and 28.772 seconds. Lewis Hamilton finished second in the Scuderia Ferrari, just 0.799 seconds behind. Kimi Antonelli finished third in the Mercedes-AMG PETRONAS F1 Team car, a further 3.207 seconds back.\n\nSeventeen drivers are classified as finishers, meaning they completed the race distance or enough laps to be counted. Five drivers did not finish: Arvid Lindblad stopped after 58 laps, Oliver Bearman after 47 laps, Valtteri Bottas after 42 laps, and both Lance Stroll and Fernando Alonso after only 5 laps.\n\nLewis Hamilton set the fastest lap during the race. His fastest lap time was 1:19.268, achieved on lap 50 of the race.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}

@@ -1,0 +1,15 @@
+{
+  "doc_type": "Stewards Decision",
+  "source_url": null,
+  "key_facts": [
+    "Charles Leclerc, driving car 16 for Scuderia Ferrari HP, left the track and gained a lasting advantage during the race at the 2026 Mexico City Grand Prix, breaching Article B1.8.6 of the FIA F1 Regulations.",
+    "The Stewards determined that Leclerc's car and another car (car 44) both entered turn 4 with excessive speed and neither could have completed the corner while staying on track.",
+    "Leclerc completed an overtake while off track, which the Stewards found warrants a penalty because he was not entitled to claim the corner due to the excessive entry speed.",
+    "The Stewards imposed a 5 second time penalty on Leclerc, reduced from the baseline guideline of 10 seconds in mitigation of the fact that car 44 was also off track on the inside and the incident occurred early in the first lap."
+  ],
+  "plain_explanation": "The Stewards penalised Charles Leclerc, car 16 for Scuderia Ferrari HP, during the race at the 2026 Mexico City Grand Prix for leaving the track and gaining a lasting advantage.\n\nThe incident happened at turn 4. Both Leclerc's car and car 44 entered the corner at excessive speed, which meant neither car could stay on track to complete the corner. Car 44, which was on the inside, had to go off track. Leclerc then completed an overtake while his car was off the track.\n\nThe Stewards ruled that Leclerc was not allowed to claim the corner because he came in at excessive speed. A driver cannot make a legal overtake if they leave the track to do it. Leclerc breached Article B1.8.6 of the FIA F1 Regulations, which prohibits gaining a lasting advantage by leaving the track.\n\nThe Stewards gave Leclerc a 5 second time penalty. The normal starting point for this type of breach is 10 seconds, but the Stewards reduced it because car 44 was also off track on the inside of Leclerc's car, and because the incident happened early in the first lap.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}

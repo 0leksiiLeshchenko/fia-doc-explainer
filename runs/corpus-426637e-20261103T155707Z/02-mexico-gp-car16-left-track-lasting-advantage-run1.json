@@ -1,0 +1,15 @@
+{
+  "doc_type": "Stewards Decision",
+  "source_url": null,
+  "key_facts": [
+    "Driver Charles Leclerc in car 16 for Scuderia Ferrari was penalised during the race at the 2026 Mexico City Grand Prix.",
+    "Both cars entered turn 4 with excessive speed and neither could have made the corner while staying on track.",
+    "Car 16 left the track and gained a lasting advantage by completing an overtake whilst off track, breaching Article B1.8.6 of the FIA F1 Regulations.",
+    "The Stewards applied a 5 second time penalty, reduced from the baseline guideline of 10 seconds because car 44 was also off track and the incident occurred early in the first lap."
+  ],
+  "plain_explanation": "Charles Leclerc in car 16 for Scuderia Ferrari was given a 5 second time penalty during the race at the 2026 Mexico City Grand Prix.\n\nThe Stewards reviewed video evidence and positioning data. At turn 4 early in the first lap, both car 16 and car 44 entered with excessive speed. Neither car could have stayed on the track through the corner. Car 44 was on the inside and had to go off track. Car 16 then completed an overtake while off track and gained a lasting advantage.\n\nThis breached Article B1.8.6 of the FIA F1 Regulations, which requires drivers to stay on track. The Stewards normally apply a 10 second penalty for this infringement, but reduced it to 5 seconds because car 44 was also off track and this happened very early in the race.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}

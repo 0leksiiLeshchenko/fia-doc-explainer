@@ -1,0 +1,16 @@
+{
+  "doc_type": "Competition Notes",
+  "source_url": null,
+  "key_facts": [
+    "This document applies to the 2026 Mexico City Grand Prix and concerns all free practice sessions, qualifying, and the race.",
+    "Drivers who exceed the maximum time between the Second and First Safety Car Lines on any lap during qualifying, in-laps, out-laps, or reconnaissance laps may be investigated for going unnecessarily slowly.",
+    "Drivers who are caught by a faster car during the race must allow that car past at the first available opportunity, signalled by blue light panels when the faster car is within 1.2 seconds.",
+    "Multiple circuit-specific instructions are set out for parc fermé access, pit lane procedures, practice starts, grid procedures, and track limits, including rejoin routes after running wide at turns 4 and 11.",
+    "Safety Car deployment will be signalled by a message 'SAFETY CAR DEPLOYED' and trackside light panels displaying 'SC', not by waved yellow flags or 'SC' boards."
+  ],
+  "plain_explanation": "\nThis document sets out the Race Director's competition notes for the 2026 Mexico City Grand Prix. It covers how officials and teams must run the event safely and fairly.\n\nDrivers must not go unnecessarily slowly on the circuit. If a driver exceeds the maximum time between the Second and First Safety Car Lines on any lap during qualifying, in-laps, out-laps, or reconnaissance laps, the stewards may investigate them. The teams will be told what the maximum time is after the second practice session.\n\nDuring the race, drivers who are caught by another car must allow the faster driver past at the first available opportunity. When the faster car gets within 1.2 seconds, the slower car will see blue light panels (a signal shown to drivers on the track), blue cockpit lights, and a message on the timing monitors telling them to let the other driver through.\n\nThe document gives detailed instructions for specific parts of the circuit and pit lane. Team personnel may only enter parc fermé (the sealed area where cars are kept after the race) using approved routes, and only to fit cooling fans or do work that officials require. Practice starts may only be done in certain places and not during qualifying. If a driver runs wide at turn 4 and crosses the yellow line with all four wheels, they must rejoin using the asphalt route, not the grass, unless it is necessary. If a driver's car goes behind the red and white kerb at turn 11, they must rejoin by keeping to the right of the first polystyrene block and then to the left of the second.\n\nQualifying will not be resumed if any period is interrupted with less than 75 seconds remaining.\n\nSafety Car deployment will now be signalled only by a message to all teams saying 'SAFETY CAR DEPLOYED' and trackside light panels displaying 'SC'. Waved yellow flags and 'SC' boards will not be used. When the Safety Car is withdrawn, teams will receive a message 'SAFETY CAR LIGHTS OFF' and a green light panel will be displayed at the Control Line.\n\nThe circuit has been resurfaced from after turn 11 until before turn 1, and several kerbs have been changed or marked more clearly with painted lines.\n",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}

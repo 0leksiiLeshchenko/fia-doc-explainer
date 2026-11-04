@@ -1,8 +1,9 @@
 import logging
+from typing import Any
 
 import anthropic
 from anthropic import Anthropic
-from pydantic import ValidationError
+from pydantic import BaseModel, ValidationError
 
 from fia_doc_explainer.prompts import (
     FLAG_LOW_CONFIDENCE_DESCRIPTION,
@@ -27,6 +28,45 @@ RETRYABLE_ANTHROPIC_EXCEPTIONS = (
     anthropic.APITimeoutError,
     anthropic.APIConnectionError,
 )
+
+# Unsupported by strict tool use: the API answers 400 if any of these is present.
+STRICT_UNSUPPORTED_KEYWORDS = frozenset(
+    {
+        "minLength",
+        "maxLength",
+        "minimum",
+        "maximum",
+        "exclusiveMinimum",
+        "exclusiveMaximum",
+        "multipleOf",
+    }
+)
+
+# Keys whose value maps arbitrary names to schemas: the names are not keywords.
+_NAMED_SCHEMA_MAPS = frozenset({"properties", "$defs", "definitions"})
+
+
+def _to_strict(node: Any) -> Any:
+    if isinstance(node, list):
+        return [_to_strict(item) for item in node]
+    if not isinstance(node, dict):
+        return node
+    result: dict[str, Any] = {}
+    for key, value in node.items():
+        if key in STRICT_UNSUPPORTED_KEYWORDS:
+            continue
+        if key in _NAMED_SCHEMA_MAPS and isinstance(value, dict):
+            result[key] = {name: _to_strict(sub) for name, sub in value.items()}
+        else:
+            result[key] = _to_strict(value)
+    node_type = result.get("type")
+    if node_type == "object" or (isinstance(node_type, list) and "object" in node_type):
+        result["additionalProperties"] = False
+    return result
+
+
+def strict_tool_schema(model: type[BaseModel]) -> dict[str, Any]:
+    return _to_strict(model.model_json_schema())
 
 
 def is_quota_error(err: anthropic.BadRequestError) -> bool:
@@ -53,12 +93,14 @@ class AnthropicProvider:
                     {
                         "name": "provide_summary",
                         "description": PROVIDE_SUMMARY_DESCRIPTION,
-                        "input_schema": ProvideSummary.model_json_schema(),
+                        "strict": True,
+                        "input_schema": strict_tool_schema(ProvideSummary),
                     },
                     {
                         "name": "flag_low_confidence",
                         "description": FLAG_LOW_CONFIDENCE_DESCRIPTION,
-                        "input_schema": FlagLowConfidence.model_json_schema(),
+                        "strict": True,
+                        "input_schema": strict_tool_schema(FlagLowConfidence),
                     },
                 ],
                 tool_choice={"type": "any"},

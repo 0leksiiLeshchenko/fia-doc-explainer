@@ -1,12 +1,17 @@
 from types import SimpleNamespace
+from typing import Any
 
 import anthropic
 import httpx2
 import pytest
 from anthropic.types import ToolUseBlock
-from pydantic import ValidationError
+from pydantic import BaseModel, Field, ValidationError
 
-from fia_doc_explainer.providers.anthropic_provider import AnthropicProvider
+from fia_doc_explainer.providers.anthropic_provider import (
+    STRICT_UNSUPPORTED_KEYWORDS,
+    AnthropicProvider,
+    strict_tool_schema,
+)
 from fia_doc_explainer.providers.errors import (
     ProviderPermanentError,
     ProviderQuotaError,
@@ -189,3 +194,125 @@ def test_summarize_translates_retryable_error_to_transient_error(
 def test_empty_low_confidence_reason_raises_ValidationError() -> None:
     with pytest.raises(ValidationError):
         FlagLowConfidence(reason="")
+
+
+class _Inner(BaseModel):
+    name: str = Field(min_length=2, max_length=9)
+    score: int = Field(ge=0, le=10, multiple_of=2)
+
+
+class _Outer(BaseModel):
+    inner: _Inner
+    items: list[_Inner]
+    ratio: float = Field(gt=0, lt=1)
+
+
+def _walk(node: Any) -> list[dict[str, Any]]:
+    found: list[dict[str, Any]] = []
+    if isinstance(node, dict):
+        found.append(node)
+        for value in node.values():
+            found.extend(_walk(value))
+    elif isinstance(node, list):
+        for item in node:
+            found.extend(_walk(item))
+    return found
+
+
+def _assert_strict_compatible(schema: dict[str, Any]) -> None:
+    for node in _walk(schema):
+        assert not STRICT_UNSUPPORTED_KEYWORDS & node.keys()
+        if node.get("type") == "object":
+            assert node["additionalProperties"] is False
+
+
+@pytest.mark.parametrize("model", [FlagLowConfidence, ProvideSummary])
+def test_strict_schema_of_real_models_is_compatible(model: type[BaseModel]) -> None:
+    _assert_strict_compatible(strict_tool_schema(model))
+
+
+def test_strict_schema_strips_nested_constraints() -> None:
+    original = _Outer.model_json_schema()
+    assert any("minLength" in n for n in _walk(original))
+
+    schema = strict_tool_schema(_Outer)
+
+    _assert_strict_compatible(schema)
+    assert "_Inner" in schema["$defs"]
+    assert schema["$defs"]["_Inner"]["additionalProperties"] is False
+
+
+def test_strict_schema_keeps_property_named_like_a_keyword() -> None:
+    class Odd(BaseModel):
+        minimum: int
+
+    schema = strict_tool_schema(Odd)
+    assert "minimum" in schema["properties"]
+
+
+def test_strict_schema_does_not_mutate_source_schema() -> None:
+    before = FlagLowConfidence.model_json_schema()
+    assert before["properties"]["reason"]["minLength"] == 1
+
+    strict_tool_schema(FlagLowConfidence)
+
+    after = FlagLowConfidence.model_json_schema()
+    assert after == before
+    assert after["properties"]["reason"]["minLength"] == 1
+    assert "additionalProperties" not in after
+
+
+def test_empty_reason_still_fails_model_validate() -> None:
+    with pytest.raises(ValidationError):
+        FlagLowConfidence.model_validate({"reason": ""})
+
+
+class _FakeMessages:
+    def __init__(self, response: SimpleNamespace) -> None:
+        self.response = response
+        self.kwargs: dict[str, Any] = {}
+
+    def create(self, **kwargs: Any) -> SimpleNamespace:
+        self.kwargs = kwargs
+        return self.response
+
+
+class _FakeClient:
+    def __init__(self, response: SimpleNamespace) -> None:
+        self.messages = _FakeMessages(response)
+
+
+def _tool_response(name: str, tool_input: dict[str, Any]) -> SimpleNamespace:
+    block = ToolUseBlock(id="toolu_x", name=name, type="tool_use", input=tool_input)
+    return SimpleNamespace(content=[block])
+
+
+def test_summarize_sends_both_tools_as_strict_without_min_length() -> None:
+    client = _FakeClient(_tool_response("flag_low_confidence", {"reason": "garbled"}))
+    provider_instance = AnthropicProvider(
+        model="claude-haiku-4-5",
+        client=client,  # type: ignore[arg-type]
+    )
+
+    provider_instance.summarize("FIA doc text version")
+
+    tools = client.messages.kwargs["tools"]
+    assert {t["name"] for t in tools} == {"provide_summary", "flag_low_confidence"}
+    for tool in tools:
+        assert tool["strict"] is True
+        _assert_strict_compatible(tool["input_schema"])
+        assert "minLength" not in str(tool["input_schema"])
+
+
+def test_summarize_raises_response_error_on_empty_reason_from_strict_tool() -> None:
+    client = _FakeClient(_tool_response("flag_low_confidence", {"reason": ""}))
+    provider_instance = AnthropicProvider(
+        model="claude-haiku-4-5",
+        client=client,  # type: ignore[arg-type]
+    )
+
+    with pytest.raises(
+        ProviderResponseError,
+        match=r"^Schema validation failed for tool 'flag_low_confidence'",
+    ):
+        provider_instance.summarize("FIA doc text version")

@@ -1,0 +1,16 @@
+{
+  "doc_type": "Provisional Race Classification",
+  "source_url": null,
+  "key_facts": [
+    "This is the provisional race classification for the 2026 Mexico City Grand Prix held on 30 October to 1 November 2026, after 71 laps (305.354 km).",
+    "Max Verstappen (Oracle Red Bull Racing) finished first, Lewis Hamilton (Scuderia Ferrari HP) second, and Kimi Antonelli (Mercedes-AMG PETRONAS F1 Team) third.",
+    "Five drivers did not finish the race: Arvid Lindblad (58 laps), Oliver Bearman (47 laps), Valtteri Bottas (42 laps), Lance Stroll (5 laps), and Fernando Alonso (5 laps).",
+    "Lewis Hamilton set the fastest lap, a time of 1:19.268 on lap 50.",
+    "The classification is provisional and identifies points awarded to the top ten finishers and those who competed for points."
+  ],
+  "plain_explanation": "This document is the provisional race classification for the 2026 Mexico City Grand Prix, a Formula 1 race held 30 October to 1 November 2026.\n\nThe race covered 71 laps over a distance of 305.354 kilometres. Max Verstappen driving for Oracle Red Bull Racing won the race with a time of 2 hours 20 minutes 28.772 seconds. Lewis Hamilton finished second in a Scuderia Ferrari HP car, 0.799 seconds behind. Kimi Antonelli driving for Mercedes-AMG PETRONAS F1 Team finished third, 4.006 seconds behind the winner.\n\nTen drivers were classified and scored points. The finishing order continued: Charles Leclerc (Scuderia Ferrari HP) fourth, Lando Norris (McLaren Mastercard F1 Team) fifth, George Russell (Mercedes-AMG PETRONAS F1 Team) sixth, Oscar Piastri (McLaren Mastercard F1 Team) seventh, Franco Colapinto (BWT Alpine F1 Team) eighth, Liam Lawson (Visa Cash App Racing Bulls F1 Team) ninth, and Pierre Gasly (BWT Alpine F1 Team) tenth. Four drivers finished the race but were not classified in the points.\n\nFive drivers did not finish the race. Arvid Lindblad completed 58 laps before stopping. Oliver Bearman completed 47 laps. Valtteri Bottas completed 42 laps. Lance Stroll and Fernando Alonso, both driving for Aston Martin Aramco F1 Team, each completed only 5 laps before retiring.\n\nLewis Hamilton set the fastest lap with a time of 1:19.268 on lap 50, at an average speed of 195.468 kilometres per hour.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}

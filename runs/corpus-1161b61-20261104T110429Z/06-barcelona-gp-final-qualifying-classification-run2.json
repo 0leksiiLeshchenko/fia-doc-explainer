@@ -1,0 +1,17 @@
+{
+  "doc_type": "Final Qualifying Classification",
+  "source_url": null,
+  "key_facts": [
+    "This document is the Final Qualifying Classification timing sheet for the 2026 Barcelona-Catalunya Grand Prix, issued by the Stewards on 13 June 2026.",
+    "George RUSSELL (Mercedes-AMG PETRONAS F1 Team) took pole position with a best lap of 1:14.679 in Q3, also recorded as the fastest lap of qualifying.",
+    "The session was split into Q1, Q2 and Q3 as usual: the slowest cars were eliminated after Q1 and Q2, so only drivers ranked 1st to 10th (Russell down to Leclerc) set times in Q3.",
+    "Charles LECLERC set a time in Q1 and Q2 but did not complete a lap in Q3, shown as DNF, and is classified 10th.",
+    "Drivers ranked 11th to 22nd, including Lindblad, Bortoleto, Colapinto, Gasly, Bearman, Sainz, Ocon, Albon, Perez, Bottas, Stroll and Alonso, were eliminated in Q1 or Q2 and did not advance further.",
+    "This document lists times and classification only; it does not record any penalties or investigations."
+  ],
+  "plain_explanation": "This is the Final Qualifying Classification for the 2026 Barcelona-Catalunya Grand Prix, issued by the Stewards on 13 June 2026. It is simply the official timing sheet showing how each driver performed across the three parts of qualifying.\n\nQualifying is split into three knockout sessions. In Q1, all 22 drivers set lap times, and the slowest drivers are eliminated. The remaining drivers go into Q2, where more are eliminated, and the fastest drivers left go into Q3 to fight for pole position, the best starting spot for the race. This document shows that only the top 10 drivers set a time in Q3, meaning everyone else was eliminated in Q1 or Q2 and will start further back on the grid.\n\nGeorge Russell set the fastest time in Q3, 1:14.679, which makes him pole position holder and also gives him the fastest lap of the whole qualifying session. Charles Leclerc made it into Q3 but is shown as DNF, meaning he did not finish a timed lap in that final session; he is still classified 10th based on his earlier Q2 time.\n\nThe rest of the sheet simply lists every driver's lap times and the number of laps they did in each session, giving the full grid order for the race. The document does not mention any penalties, breaches, or investigations — it is purely a record of the qualifying times and final grid positions.",
+  "model_used": "claude-sonnet-5",
+  "low_confidence_reason": "The document is a timing sheet showing final qualifying results, not a stewards decision document. It contains classification data and does not decide any penalty, appeal, or sporting matter.",
+  "heuristic_reason": null,
+  "low_confidence": true
+}
