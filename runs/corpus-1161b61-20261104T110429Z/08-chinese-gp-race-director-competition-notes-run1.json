@@ -1,0 +1,14 @@
+{
+  "doc_type": "Race Director's Competition Notes",
+  "source_url": null,
+  "key_facts": [
+    "This document sets out competition rules for the 2026 Chinese Grand Prix (13-15 March 2026).",
+    "It covers safety procedures, pit lane conduct, grid procedures, qualifying and practice practices, and circuit modifications at Shanghai.",
+    "The rules address drivers' obligations during lapping, starting procedures, and pit lane personnel restrictions to ensure safe and orderly racing."
+  ],
+  "plain_explanation": "The FIA Race Director has issued competition notes for the 2026 Chinese Grand Prix. These notes give detailed instructions to teams and drivers about how to conduct themselves during the event.\n\nOn track, drivers must not exceed a maximum time between two safety car lines during Sprint Qualifying, Qualifying, and reconnaissance laps, or they may be deemed to be going unnecessarily slowly. During the Sprint and Race, drivers who are being lapped must allow faster drivers past at the first available opportunity when blue light panels are shown to them. Drivers must also avoid erratic acceleration, braking or manoeuvres after the safety car's orange lights are extinguished and before it returns to the pits.\n\nIn the pit lane, team personnel are only allowed there immediately before they need to work on a car, and must leave as soon as work is complete. After all cars able to do so have finished the Race, a message will be sent allowing pass holders who are not normally permitted in the pit lane to enter. Pit lane safety rules also apply until that point.\n\nPractice starts during Free Practice can only be done on the grid, not at pit exit. During reconnaissance laps, cars wishing to do a practice start must use a specific part of the pit exit road and not cross a white line, and must keep to the right to let other cars pass.\n\nOn the grid, cars must be in a single line in the fast lane (the lane closest to the pit boxes) in the order they arrived there before a session starts. Drivers can blend into the fast lane from the inner lane if there is a suitable gap and they do this safely.\n\nThe notes also describe where certain equipment is placed around the circuit, how cars should be removed from the grid if needed, what happens if the race is suspended, and technical requirements such as ERS safety checks and driver weighing procedures.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}

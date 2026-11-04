@@ -1,0 +1,16 @@
+{
+  "doc_type": "Stewards Decision",
+  "source_url": null,
+  "key_facts": [
+    "Liam Lawson, driving car 30 for Visa Cash App Racing Bulls, breached Articles C5.12.6 and C5.12.7 of the F1 Regulations during Q2 qualifying at the 2026 Mexico City Grand Prix.",
+    "After crossing the control line at the end of his fastest lap, the driver did not lift off the power immediately, which prevented the MGUK (Motor Generator Unit-Kinetic) from reducing its deployment at the required rate.",
+    "The team argued the breach gave no performance advantage, but the Stewards found that non-compliance with the Technical Regulations is not excused by lack of performance advantage.",
+    "Car 30 is disqualified from the Provisional Qualifying Classifications.",
+    "The Stewards noted the team self-disclosed the breach, but precedent requires disqualification for Technical Regulation non-compliance regardless of mitigating circumstances."
+  ],
+  "plain_explanation": "Liam Lawson and his team Visa Cash App Racing Bulls faced a penalty during Q2 qualifying at the 2026 Mexico City Grand Prix.\n\nThe car did not comply with Articles C5.12.6 and C5.12.7 of the F1 Regulations. Specifically, at the end of his fastest lap in Q2, after crossing the control line, the driver did not lift off the power immediately. This meant the MGUK (Motor Generator Unit-Kinetic, a device that recovers energy during braking) did not reduce its deployment at the rate the regulations require.\n\nThe team argued this breach gave the car no performance advantage. However, the Stewards stated that non-compliance with the Technical Regulations cannot be excused simply because no advantage was gained. The regulations require that a car must comply with them at all times during an event.\n\nThe Stewards noted that the team themselves reported the problem. Even so, there are many precedents requiring disqualification when a car does not comply with the Technical Regulations, regardless of other circumstances. Car 30 is disqualified from the Provisional Qualifying Classifications.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}

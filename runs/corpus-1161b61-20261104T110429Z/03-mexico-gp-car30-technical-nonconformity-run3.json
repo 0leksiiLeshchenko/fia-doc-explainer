@@ -1,0 +1,16 @@
+{
+  "doc_type": "Stewards Decision",
+  "source_url": null,
+  "key_facts": [
+    "Car 30, driven by Liam Lawson for Visa Cash App Racing Bulls, is disqualified from the Provisional Qualifying Classifications for the 2026 Mexico City Grand Prix.",
+    "The car did not comply with Articles C5.12.6 and C5.12.7 of the F1 Regulations during Qualifying.",
+    "After the control line at the end of Lawson's fastest lap in Q2, the driver did not lift off the power immediately, which meant the car failed to achieve the regulated rate of reduction of MGUK deployment required for the 'step down'.",
+    "The team argued there was no performance advantage gained, but the Stewards found that non-compliance with Technical Regulations is not excused by lack of performance advantage.",
+    "The team self-disclosed the breach, but established precedent requires disqualification for failure to comply with Technical Regulations."
+  ],
+  "plain_explanation": "Car 30, driven by Liam Lawson, is disqualified from the results of Qualifying for the 2026 Mexico City Grand Prix.\n\nThe Stewards found that the car did not comply with the Technical Regulations during Q2 qualifying. After Lawson crossed the control line at the end of his fastest lap, he did not lift off the power immediately. This meant the car did not achieve the required rate of reduction of MGUK deployment (the managed kinetic energy system that recovers energy under braking). The regulations require a \"step down\" in MGUK deployment after the control line, and Lawson's car did not meet this requirement.\n\nThe team argued that this failure gave no performance advantage. The Stewards rejected this argument. Non-compliance with the Technical Regulations is not allowed even if there is no performance advantage. The regulations require that a car must comply with them at all times during an event.\n\nThe Stewards noted that the team self-disclosed the breach, which shows good conduct. However, there are many previous cases that establish a disqualification penalty when a car does not comply with the Technical Regulations, and the Stewards applied that precedent.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}

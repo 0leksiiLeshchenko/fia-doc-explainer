@@ -1,0 +1,15 @@
+{
+  "doc_type": "Stewards Decision",
+  "source_url": null,
+  "key_facts": [
+    "Charles Leclerc, car number 16, left the track during the race at the 2026 Mexico City Grand Prix on 1 November 2026 and gained a lasting advantage, breaching Article B1.8.6 of the FIA F1 Regulations.",
+    "The incident occurred at turn 4 on the first lap when both car 16 and car 44 entered with excessive speed and could not complete the corner while staying on track.",
+    "The stewards determined that car 16 was not entitled to the corner due to the excessive entry speed and completed an overtake while off track.",
+    "Car 16 received a 5 second time penalty, reduced from a baseline guideline of 10 seconds because car 44 was also off track and the incident occurred early in the first lap."
+  ],
+  "plain_explanation": "The stewards penalised Charles Leclerc in car 16 during the race at the 2026 Mexico City Grand Prix.\n\nCar 16 left the track at turn 4 on the first lap and gained a lasting advantage by completing an overtake while off track. This breaches Article B1.8.6 of the FIA F1 Regulations, which states that a car must not leave the track and gain a lasting advantage.\n\nBoth car 16 and car 44 entered turn 4 with excessive speed, which meant neither driver could complete the corner while staying on track. Car 44 was on the inside of the corner and also went off track. The stewards found that car 16 was not entitled to claim the corner because of the excessive entry speed, and then completed an overtake while off track.\n\nThe penalty given was a 5 second time penalty. The stewards noted that the baseline penalty guideline for this breach is 10 seconds, but they reduced it because car 44 was also off track on the inside of car 16 and because the incident happened early in the first lap.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}

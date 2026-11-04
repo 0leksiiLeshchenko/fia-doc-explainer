@@ -383,3 +383,95 @@ Content — what strict is not meant to touch:
    in the prompt changed;
  - 06: the qualifying classification presented as the starting grid in at
    least 2 of 3 — it was 3 of 3, a systematic error, not noise.
+
+## Strict rerun at 1161b61 (runs/corpus-1161b61-20261104T110429Z)
+
+Same corpus, same script, 3 runs per document, 24 calls. The only code change
+since the step 8 run is 47f412f: strict tool use on both Anthropic tools.
+
+### Before and after
+
+                                     step 8 (426637e)   strict (1161b61)
+    successful calls                 21 / 24            24 / 24
+    structural failures              3                  0
+    tool-call markup in a string     1 (07 run2)        0
+    escalations                      3, all failed      1, succeeded
+    model flag                       0                  1
+    heuristic                        0                  0
+    answers with a content error     10 / 21            12 / 24
+
+The step 8 figure is recounted by the refined definition: 01 run2 there
+("a penalty for unsportsmanlike or reckless driving") glosses a term and no
+longer counts, so 11 becomes 10. Both columns now use one definition.
+
+### Predictions scored
+
+4 of 6 checkable predictions held: 0 structural failures, 24 of 24 calls
+succeed, heuristic 0, content errors within 8–15 (12), 06 presented as the
+starting grid in at least 2 of 3 (3 of 3). Missed: "all answered by the
+primary" and "model flag 0" — the same single call, 06 run2, below.
+
+Markup inside a string: 0, as recorded beforehand this run cannot decide it.
+At the old rate of 1 in 24, a run of 24 shows zero about 36% of the time.
+
+### Structural failures: 3 → 0
+
+If strict changed nothing and the rate stayed at 3 in 24, zero in 24 would
+come up about 4% of the time. The stronger argument is the mechanism:
+constrained decoding makes a structural failure impossible by construction,
+so the run confirms that strict is in effect rather than proving it works.
+With no malformed responses left, the escalations caused by them are gone
+too: escalation was spent 3 times on correlated failures, now once, on a flag.
+
+### First model flag on a real document — for the wrong reason
+
+06 run2: the primary called flag_low_confidence with "The document is a
+timing sheet showing final qualifying results, not a stewards decision
+document. It contains classification data and does not decide any penalty,
+appeal, or sporting matter." The escalation model then answered, and the
+flag reason was kept in the output. The first time the flag → escalation →
+summary path ran end to end on a real document.
+
+But the flag exists for unusable input, and the complaint is about genre:
+the document decides nothing. The table failure the flag was expected to
+catch — structure lost on extraction — is not what triggered it. Likely
+cause: the schema is framed around decisions (key_facts: "what this document
+decides"), so a document without one looks foreign. One case in 24, an
+observation. The escalation answer still presents the classification as the
+grid ("giving the full grid order for the race").
+
+### Content errors: systematic and random
+
+Repeated in both runs:
+ - 06: classification presented as the starting grid — 6 of 6 across both;
+ - 05: "may be penalised" for going slowly, or an actor the text does not
+   name — 3 of 3 here (run1 "The Race Director will give teams a maximum
+   time"; runs 2 and 3 "may be penalised"), 2 of 3 in step 8. 08 run3 now
+   shows the same "may be penalised", so the §1 wording pattern holds across
+   the genre after all, not only on 05;
+ - 08 run3: the same two misreads as step 8 run3 — "stay left" for practice
+   starts, and TSP 17 "moved 100 metres further back".
+
+New, single:
+ - 01 run2: the Warning is "a signal that further offences can lead to a
+   penalty" — a consequence the text does not state;
+ - 04 run2: "Seventeen drivers finished the race in the points-scoring
+   positions" — 10 scored, and the next paragraph says so itself;
+ - 06 run2: "only drivers ranked 1st to 10th (Russell down to Leclerc) set
+   times in Q3" — Leclerc set none;
+ - 06 run3: Leclerc "had the third-fastest time in Q2" — 1:15.281 is second,
+   after Russell's 1:15.228;
+ - 07 run3: "Antonelli's team said he was experiencing a mechanical issue" —
+   in the text the Stewards accepted it;
+ - 08 run1: "the fast lane (the lane closest to the pit boxes)" — a wrong
+   gloss, counted as an error of fact;
+ - 08 run2: "maximum speeds on certain laps" — the text sets a maximum time.
+
+A systematic error is a prompt problem and can be addressed there; 06 and
+05 are the first candidates. A random one can only be made rarer.
+
+### Conclusion
+
+Strict fixed what it was meant to fix and left content alone: format
+failures 4 in 24 → 0 in 24, content errors unchanged within noise. The
+remaining risk is entirely in clean text, where no guard looks.

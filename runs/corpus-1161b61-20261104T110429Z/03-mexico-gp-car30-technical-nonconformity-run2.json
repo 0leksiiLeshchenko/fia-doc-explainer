@@ -1,0 +1,16 @@
+{
+  "doc_type": "Stewards Decision",
+  "source_url": null,
+  "key_facts": [
+    "Liam Lawson, driving car 30 for Visa Cash App Racing Bulls, is disqualified from the Provisional Qualifying Classifications for the 2026 Mexico City Grand Prix.",
+    "The car did not comply with Articles C5.12.6 and C5.12.7 of the F1 Regulations during qualifying session Q2.",
+    "After crossing the control line at the end of his fastest lap, the driver did not lift off the power immediately, which meant the car did not achieve the required regulated step down of MGUK deployment (a power delivery reduction system).",
+    "The team argued no performance advantage was gained, but the Stewards found that non-compliance with the Technical Regulations cannot be excused on this ground, and cars must comply with regulations at all times.",
+    "The team self-disclosed the breach, but the Stewards applied the standard penalty of Disqualification in accordance with established precedent."
+  ],
+  "plain_explanation": "Liam Lawson and Visa Cash App Racing Bulls are disqualified from qualifying for the 2026 Mexico City Grand Prix.\n\nThe Stewards found that car 30 did not comply with Articles C5.12.6 and C5.12.7 of the F1 Regulations. During Q2 qualifying, after Lawson crossed the control line at the end of his fastest lap, he did not lift off the power immediately. This meant the car did not reduce MGUK deployment (a power delivery system that must step down in a controlled way) at the required rate.\n\nThe team said this made no difference to how fast the car went. The Stewards replied that breaking the Technical Regulations is not allowed, even if it gives no advantage. They also said a car must follow the regulations at all times during an event, not just when it matters for performance.\n\nThe team told the Stewards about the problem themselves. The Stewards noted this as a point in their favour. However, there are many earlier cases with similar breaches, and in all of them the penalty was disqualification. The Stewards followed that pattern and disqualified car 30 from the results.",
+  "model_used": "claude-haiku-4-5",
+  "low_confidence_reason": null,
+  "heuristic_reason": null,
+  "low_confidence": false
+}
