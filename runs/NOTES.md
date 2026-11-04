@@ -354,3 +354,32 @@ strict schemas do not support minLength, and FlagLowConfidence.reason carries
 one since 6446017; deciding what replaces it is part of the change. Open
 question for the rerun: whether strict also stops a leak inside a string
 value, as in 07 run2, or only the structural failures.
+
+## Strict rerun — predictions (written before the run)
+
+Same corpus, same script, 3 runs per document, 24 calls; the only change
+since the step 8 run is strict tool use on both Anthropic tools. Baseline
+is the step 8 run: 3 calls failed on a malformed tool call, 1 more leaked
+`</invoke>` into plain_explanation, 11 of 21 answers had a content error.
+Filled-in facts are counted by the refined definition from step 8.
+
+Format — what strict is meant to fix:
+ - structural failures (key_facts as a string, any "Schema validation
+   failed" in .err): 0 of 24. Constrained decoding makes them impossible,
+   not just rarer; a single one would mean strict is not in effect;
+ - tool-call markup inside a string value (`<parameter`, `</invoke>`,
+   `</explanation>`): this run cannot decide it. Strict constrains the
+   structure, not the characters inside a string, and the baseline had 1 in
+   24 — zero here would be as likely by chance as by the fix. Recorded, not
+   predicted.
+
+Pipeline:
+ - 24 of 24 calls succeed, all answered by the primary model;
+ - heuristic 0 of 24, model flag 0 of 24.
+
+Content — what strict is not meant to touch:
+ - answers with at least one content error: roughly as before, 8 to 15 of
+   24. A drop outside that range would need an explanation, since nothing
+   in the prompt changed;
+ - 06: the qualifying classification presented as the starting grid in at
+   least 2 of 3 — it was 3 of 3, a systematic error, not noise.
